@@ -1,0 +1,5 @@
+Microrobotics is a new exciting field in which active stuctures capable of directed movement locomote at the micron scale. Here, locomotion is a challenge as traditional propulsion mechanisms such as kicking, paddling, or turbines are ineffective. Instead, microbots mimic biology and micro-scale organisms. They can move by swimming like a flagella, or rolling on a surface like a neutrophil. Microbots have a variety of uses, mainly drug delivery, local mechanical action (surgery), and environmental remediation.
+
+A plethora of both bio-mimicking and artificial microbot designs are actively being studied and new ones are being designed constantly, especially with the increasing adoption of nano-scale 3D printing.
+
+While the microscopic study of colloidal dynamics is mature [grier footnote], the tools developed are often only suitable for uniform, spherical particles. The typical methods for tracking particles [trackmate, trackpy] neglect to report detailed information on parameters such as size, perimeter, eccentricity and brightness.
