@@ -1,0 +1,13 @@
+name = "Microbot"
+uuid = "f2f4b30c-0e7b-4018-b992-2f46df5706a6"
+authors = ["Coy Zimmermann"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
