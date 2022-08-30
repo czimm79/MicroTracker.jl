@@ -4,7 +4,7 @@ CurrentModule = Microbots
 
 # Home
 
-Welcome to the documentation for [Microbots](https://github.com/czimm79/Microbots.jl) - a package to help you get from microscopy to publication.
+Welcome to the documentation for [Microbots](https://github.com/czimm79/Microbots.jl) - helping you get from microscopy to publication.
 
 ## What can it do?
 
