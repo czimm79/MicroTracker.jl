@@ -9,7 +9,9 @@ Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
-julia = "1"
+julia = "1.7, 1.8"
+FFTW = "1"
+Optim = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
