@@ -7,6 +7,6 @@
 Here's a summary of what will happen in the following sections:
 
 * data preparation outside of this package
-* start using Microbot.jl
+* start using Microbots.jl
 * analyze data
 * make publication figures

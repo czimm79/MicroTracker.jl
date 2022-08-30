@@ -1,9 +1,9 @@
 ```@meta
-CurrentModule = Microbot
+CurrentModule = Microbots
 ```
 
 # Home
 
-Documentation for [Microbot](https://github.com/czimm79/Microbot.jl).
+Documentation for [Microbots](https://github.com/czimm79/Microbots.jl).
 
 

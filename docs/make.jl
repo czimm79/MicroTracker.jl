@@ -1,16 +1,16 @@
-using Microbot
+using Microbots
 using Documenter
 
-DocMeta.setdocmeta!(Microbot, :DocTestSetup, :(using Microbot); recursive=true)
+DocMeta.setdocmeta!(Microbots, :DocTestSetup, :(using Microbots); recursive=true)
 
 makedocs(;
-    modules=[Microbot],
+    modules=[Microbots],
     authors="Coy Zimmermann",
-    repo="https://github.com/czimm79/Microbot.jl/blob/{commit}{path}#{line}",
-    sitename="Microbot.jl",
+    repo="https://github.com/czimm79/Microbots.jl/blob/{commit}{path}#{line}",
+    sitename="Microbots.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://czimm79.github.io/Microbot.jl",
+        canonical="https://czimm79.github.io/Microbots.jl",
         edit_link="master",
         assets=String[]
     ),
@@ -22,6 +22,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/czimm79/Microbot.jl",
+    repo="github.com/czimm79/Microbots.jl",
     devbranch="master"
 )

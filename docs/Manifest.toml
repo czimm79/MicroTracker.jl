@@ -55,7 +55,7 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
-[[deps.Microbot]]
+[[deps.Microbots]]
 path = ".."
 uuid = "f2f4b30c-0e7b-4018-b992-2f46df5706a6"
 version = "0.1.0"
