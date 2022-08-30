@@ -10,3 +10,16 @@ Here's a summary of what will happen in the following sections:
 * start using Microbots.jl
 * analyze data
 * make publication figures
+
+## Installation
+
+To install the package type:
+```julia
+julia> ] add Microbots
+```
+
+To use the package type
+
+```julia
+julia> using Microbots
+```
