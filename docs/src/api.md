@@ -4,5 +4,5 @@
 * I'll have to think about how to break it down into modules so its sorted here and easily digestible.
 
 ```@autodocs
-Modules = [Microbots]
+Modules = [MicroTracker]
 ```

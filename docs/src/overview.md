@@ -7,7 +7,7 @@
 Here's a summary of what will happen in the following sections:
 
 * data preparation outside of this package
-* start using Microbots.jl
+* start using MicroTracker.jl
 * analyze data
 * make publication figures
 
@@ -15,11 +15,11 @@ Here's a summary of what will happen in the following sections:
 
 To install the package type:
 ```julia
-julia> ] add Microbots
+julia> ] add MicroTracker
 ```
 
 To use the package type
 
 ```julia
-julia> using Microbots
+julia> using MicroTracker
 ```

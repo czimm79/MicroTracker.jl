@@ -1,10 +1,10 @@
 ```@meta
-CurrentModule = Microbots
+CurrentModule = MicroTracker
 ```
 
 # Home
 
-Welcome to the documentation for [Microbots](https://github.com/czimm79/Microbots.jl) - helping you get from microscopy to publication.
+Welcome to the documentation for [MicroTracker](https://github.com/czimm79/MicroTracker.jl) - helping you get from microscopy to publication.
 
 ## What can it do?
 

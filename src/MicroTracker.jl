@@ -1,4 +1,4 @@
-module Microbots
+module MicroTracker
 
 # Write your package code here.
 include("fft.jl")

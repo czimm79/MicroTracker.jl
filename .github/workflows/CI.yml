@@ -54,6 +54,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using Microbots
-            DocMeta.setdocmeta!(Microbots, :DocTestSetup, :(using Microbots); recursive=true)
-            doctest(Microbots)'
+            using MicroTracker
+            DocMeta.setdocmeta!(MicroTracker, :DocTestSetup, :(using MicroTracker); recursive=true)
+            doctest(MicroTracker)'

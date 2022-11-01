@@ -1,4 +1,4 @@
-using Microbots
+using MicroTracker
 using Test
 
 @testset "FFT" begin
@@ -24,7 +24,7 @@ using Test
     @test isapprox(b, b_true, atol=error_tolerance)
 
     # detrend
-    y_detrended = Microbots.detrend(y)
+    y_detrended = MicroTracker.detrend(y)
     
     @test isapprox(fit_line(x, y_detrended)[1], 0.0, atol=error_tolerance)
 
