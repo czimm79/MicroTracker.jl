@@ -25,3 +25,5 @@ In short, Julia is easy to read and write, yet approaches the speed of languages
 If you don't know Julia, don't worry. It is similar and as easy as Python (I'd argue easier). The best learning source is the [Computational Thinking](https://computationalthinking.mit.edu/Spring21/) course from MIT.
 
 Lastly, the Pluto notebooks included with this package allow you to tinker with established workflows, minimizing the need to reinvent the wheel.
+
+*This repository is under construction and not ready for use.*
