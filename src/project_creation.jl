@@ -8,14 +8,12 @@ Create the project!
 function create_project(folder::String; include_examples=true)
     if include_examples
         run(git(["clone", "https://github.com/czimm79/ExampleMicroTrackerData"]))
-        # need to make the include examples look the same as the one without
-    
+        mv("ExampleMicroTrackerData", folder)  # rename
     else
         mkdir(folder)
         mkdir("$folder/imagej_data")
         mkdir("$folder/linked_results")
         mkdir("$folder/original_video")
-
     end
 end
 
