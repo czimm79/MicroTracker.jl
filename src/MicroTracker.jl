@@ -2,8 +2,10 @@ module MicroTracker
 
 # Write your package code here.
 include("fft.jl")
+include("project_creation.jl")
 
 export fit_line, fftclean
+export create_project
 
 """
     add_three(x)

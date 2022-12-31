@@ -38,3 +38,16 @@ end
     
     @test add_three(3) == 6
 end
+
+@testset "Project Creation" begin
+    # use the create project function and then check that the folders are there
+    testfolder = "deletethis"
+    create_project(testfolder, include_examples=false)
+
+    @test isdir(testfolder)
+    @test isdir("$testfolder/imagej_data")
+    @test isdir("$testfolder/linked_results")
+    @test isdir("$testfolder/original_video")
+
+    rm(testfolder, recursive=true)
+end
