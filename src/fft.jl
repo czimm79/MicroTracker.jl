@@ -50,3 +50,19 @@ function fftclean(x::AbstractVector, y::AbstractVector)
 
 	return xf, yf
 end
+
+"""
+	estimate_omega(x::AbstractVector, y::AbstractVector)
+Get the highest frequency peak of `x, y` data and return the corresponding `xf` divided by 2.
+
+This works for rolling microbots when the `y` data exhibits two peaks every rotation. Depending
+on the data, this could be the `Angle`, `Major_m`, or `V` columns.
+"""
+function estimate_omega(x::AbstractVector, y::AbstractVector)
+	xf, yf = fftclean(x, y)
+	
+	peak_idx = argmax(yf)
+	particle_rotation_rate = xf[peak_idx] / 2  # Hz
+
+	return particle_rotation_rate
+end
