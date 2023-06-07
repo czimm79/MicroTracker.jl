@@ -12,3 +12,6 @@ using Test
     @test "V" in names(dfg)
 end 
 
+@testset "Numpy" begin
+    @test pyconvert(Float32, MicroTracker.npsin(1.0)) ≈ 0.84147098
+end

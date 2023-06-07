@@ -5,17 +5,24 @@ version = "0.1.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
 Git = "d7ba0133-e1db-5d97-8f8c-041e4b3a1eb2"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
+CSV = "0.10"
+DataFrames = "1"
+DataFramesMeta = "0.14"
 FFTW = "1"
+Git = "1"
 Optim = "1"
-julia = "1.7, 1.8"
+Statistics = "1"
+julia = "1.7, 1.8, 1.9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
