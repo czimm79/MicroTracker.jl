@@ -7,15 +7,15 @@ using PythonCall, CondaPkg
 const np = PythonCall.pynew()
 const tp = PythonCall.pynew()
 
-function __init__()
-    # numpy
-    PythonCall.pycopy!(np, pyimport("numpy"))
+# function __init__()
+#     # numpy
+#     PythonCall.pycopy!(np, pyimport("numpy"))
 
-    # trackpy
-    CondaPkg.add("trackpy")
-    PythonCall.pycopy!(tp, pyimport("trackpy"))
-end
+#     # trackpy
+#     CondaPkg.add("trackpy")
+#     PythonCall.pycopy!(tp, pyimport("trackpy"))
+# end
 
-function npsin(a)
-    np.sin(a)
-end
+# function npsin(a)
+#     np.sin(a)
+# end
