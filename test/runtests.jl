@@ -37,28 +37,28 @@ using Test
     @test isapprox(MicroTracker.estimate_omega(x, y), f1 / 2, atol=error_tolerance)
 end
 
-@testset "Test Function" begin
-    
-    @test add_three(3) == 6
-end
-
 @testset "Project Creation" begin
     # use the create project function and then check that the folders are there
     testfolder = "deletethis"
-    create_project(testfolder, include_examples=false)
+    create_project(testfolder, include_examples=true)
 
     @test isdir(testfolder)
-    @test isdir("$testfolder/imagej_data")
+    @test isdir("$testfolder/particle_data")
     @test isdir("$testfolder/linked_results")
     @test isdir("$testfolder/original_video")
 
+    @test isdir("$testfolder/original_video/5_8p4_28p68")
+
     rm(testfolder, recursive=true)
 
-    @testset "assets route" begin
-        MicroTracker.copy_examples_into_pwd()
-        @test isfile("test_example_script.jl")
-        rm("test_example_script.jl")
-    end
 end
 
+@testset "simple asset copy" begin
+    MicroTracker.simple_example_asset_copy()
+    @test isfile("test_example_script.jl")
+    rm("test_example_script.jl")
+end
+
+
 include("wip_tests.jl")
+include("linking_tests.jl")
