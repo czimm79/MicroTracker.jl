@@ -53,6 +53,12 @@ end
     @test isdir("$testfolder/original_video")
 
     rm(testfolder, recursive=true)
+
+    @testset "assets route" begin
+        MicroTracker.copy_examples_into_pwd()
+        @test isfile("test_example_script.jl")
+        rm("test_example_script.jl")
+    end
 end
 
 include("wip_tests.jl")

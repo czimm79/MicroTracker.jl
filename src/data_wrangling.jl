@@ -7,7 +7,7 @@ Read a linked_csv into a `DataFrame`. Assumes the `.csv` file is in the `linked_
 """
 function read_linked_csv(filename)
     df = CSV.read("linked_results/$filename", DataFrame)
-    if "Circ." in names(df)
+    if "Circ." in names(df)  # imageJ puts a period in this column and it screws with things
         rename!(df, Dict("Circ." => "Circ"))
     end
 

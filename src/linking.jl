@@ -16,6 +16,12 @@ function __init__()
     PythonCall.pycopy!(tp, pyimport("trackpy"))
 end
 
+"""
+    npsin(a)
+
+Placeholder test function that wraps `np.sin` from Python's numpy library.
+"""
 function npsin(a)
     np.sin(a)
 end
+
