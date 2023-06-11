@@ -1,5 +1,5 @@
-using MicroTracker
 using Documenter
+using MicroTracker
 
 DocMeta.setdocmeta!(MicroTracker, :DocTestSetup, :(using MicroTracker); recursive=true)
 

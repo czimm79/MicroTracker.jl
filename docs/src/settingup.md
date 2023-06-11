@@ -25,3 +25,8 @@ The dependent packages for MicroTracker normally automatically install behind th
 ```
 2. You should be able to run the `test` command in the `pkg` mode and all tests should pass. You are now ready to make changes!
 
+!!! note
+    When opening the package, sometimes VSCode will automatically recognize that the MicroTracker environment should be activated, and do it for you. If this is the case, instead of `(v1.8)`, you'll see `MicroTracker`, and you can skip step 2.
+
+## Common hiccups
+1. Sometimes when changing the dependencies of MicroTracker, the CI for the docs will fail. I fixed this by activating the docs env using `activate ./docs` and then `resolve`.
