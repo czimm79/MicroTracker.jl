@@ -32,6 +32,9 @@ using Test
     xf, yf = fftclean(x, y)
     @test isapprox(yf[argmax(yf)], a1, atol=error_tolerance)
     @test isapprox(xf[argmax(yf)], f1, atol=error_tolerance)
+
+    # estimating omega. should return the highest amplitude peak frequency / 2. So f1 / 2 ≈ 1.5   
+    @test isapprox(MicroTracker.estimate_omega(x, y), f1 / 2, atol=error_tolerance)
 end
 
 @testset "Test Function" begin
@@ -51,3 +54,5 @@ end
 
     rm(testfolder, recursive=true)
 end
+
+include("wip_tests.jl")
