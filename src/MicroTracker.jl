@@ -5,6 +5,7 @@ module MicroTracker
 # See PyCall docs on how this was set up
 # https://github.com/JuliaPy/PyCall.jl#quick-start
 
+ENV["PYTHON"] = ""  # makes the CI create a new python environment
 using PyCall
 
 const np = PyNULL()

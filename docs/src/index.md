@@ -4,7 +4,7 @@ CurrentModule = MicroTracker
 
 # Home
 
-Welcome to the documentation for [MicroTracker](https://github.com/czimm79/MicroTracker.jl) - helping you get from microscopy to publication.
+Welcome to the documentation for [MicroTracker](https://github.com/czimm79/MicroTracker.jl) - a Julia package for analyzing microscopy videos of microbots.
 
 !!! warning
     This repository is under construction and not ready for use.
