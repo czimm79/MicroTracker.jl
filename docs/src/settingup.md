@@ -23,6 +23,7 @@ The dependent packages for MicroTracker normally automatically install behind th
 ```julia-REPL
 (v1.8) pkg> activate .
 ```
+
 2. You should be able to run the `test` command in the `pkg` mode and all tests should pass. You are now ready to make changes!
 
 !!! note
@@ -30,3 +31,4 @@ The dependent packages for MicroTracker normally automatically install behind th
 
 ## Common hiccups
 1. Sometimes when changing the dependencies of MicroTracker, the CI for the docs will fail. I fixed this by activating the docs env using `activate ./docs` and then `resolve`.
+

@@ -1,9 +1,6 @@
-using MicroTracker
-using Test
-
-
 @testset "Data Wrangling" begin
-    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), "assets")  # load test data from assets
+    assets_path = joinpath(dirname(pwd()), "assets")
+    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), assets_path)  # load test data from assets
     @test "x" in names(df)  # dataframe is successfully loaded
     @test "particle_u" in names(df)
 
