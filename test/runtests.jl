@@ -59,6 +59,16 @@ end
     rm("test_example_script.jl")
 end
 
+@testset "Data Wrangling" begin
+    assets_path = joinpath(dirname(pwd()), "assets")
+    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), assets_path)  # load test data from assets
+    @test "x" in names(df)  # dataframe is successfully loaded
+    @test "particle_u" in names(df)
 
-include("wip_tests.jl")
+    # Collapsing time data
+    dfg = MicroTracker.collapse_time_data(df)
+    @test "V" in names(dfg)
+end 
+
 include("linking_tests.jl")
+include("python_interactions.jl")
