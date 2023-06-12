@@ -1,4 +1,3 @@
-
 function create_project(folder::AbstractString; include_examples=false)
     # make the general structure
     isdir(folder) && @error "The folder $folder already exists! This command creates a new folder for the project."
@@ -9,9 +8,7 @@ function create_project(folder::AbstractString; include_examples=false)
     mkdir("$folder/original_video")
 
     if include_examples
-        # find the path to the assets in the package
-        microtracker_path = pathof(@__MODULE__) |> dirname |> dirname  # go up two directories
-        assets_path = joinpath(microtracker_path, "assets")  # here's where the examples live!
+        assets_path = get_assets_path()
  
         # copy over particle data
         example_data_path = joinpath(assets_path, "particle_data")
@@ -32,14 +29,3 @@ function create_project(folder::AbstractString; include_examples=false)
 
 end
 
-function simple_example_asset_copy()
-    # get dir of microtracker assets folder
-    microtracker_path = pathof(@__MODULE__) |> dirname |> dirname
-    assets_path = joinpath(microtracker_path, "assets")
-
-    # Which file/files should be copied into the pwd
-    filename = "test_example_script.jl"
-
-    # do it
-    cp(joinpath(assets_path, filename), joinpath(pwd(), filename))
-end

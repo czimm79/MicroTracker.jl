@@ -15,6 +15,11 @@ function __init__()
     copy!(tp, pyimport_conda("trackpy", "trackpy"))
 end
 
+using CSV, DataFrames, DataFramesMeta
+using Optim, Statistics, FFTW
+
+include("developer_utilities.jl")
+export get_assets_path
 
 include("linking.jl")
 

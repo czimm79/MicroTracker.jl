@@ -1,5 +1,3 @@
-using Optim, Statistics, FFTW
-
 """
 	fit_line(x::AbstractVector, y::AbstractVector)
 
