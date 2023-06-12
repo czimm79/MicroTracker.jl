@@ -12,8 +12,8 @@ function __init__()
     PythonCall.pycopy!(np, pyimport("numpy"))
 
     # trackpy
-    CondaPkg.add("trackpy")
-    PythonCall.pycopy!(tp, pyimport("trackpy"))
+    #CondaPkg.add("trackpy")
+    #PythonCall.pycopy!(tp, pyimport("trackpy"))
 end
 
 """
