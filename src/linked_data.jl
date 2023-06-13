@@ -71,7 +71,7 @@ function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::Na
 		groupby(:particle)
 		@transform(:dx = numerical_derivative(:x),
 				   :dy = numerical_derivative(:y),
-				   :total_displacement_um = abs(total_displacement(:x, :y)) * MPP)
+				   :total_displacement_um = total_displacement(:x, :y) * MPP)
 		@transform(:dp = @. √(:dx^2 + :dy^2))
 		@transform(:time = :frame / FPS,
 				   :dx_um = :dx * FPS * MPP,

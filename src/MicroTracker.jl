@@ -34,7 +34,7 @@ include("linked_data.jl")
 export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_timestamp
 
 include("collapsed_data.jl")
-export read_linked_csv, collapse_time_data
+export load_linked_data, collapse_data, filter_trajectories
 
 include("fft.jl")
 export fit_line, fftclean

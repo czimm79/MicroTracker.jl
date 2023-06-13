@@ -1,67 +1,63 @@
 """
-    read_linked_csv(filename)
+    load_linked_data(filename)
 
-Read a linked_csv into a `DataFrame`. Assumes the `.csv` file is in the `linked_data` folder.
+Read a linked data `.csv` file into a `DataFrame`. Assumes the `.csv` file is in the `linked_data` folder.
 """
-function read_linked_csv(filename)
+function load_linked_data(filename)
     df = CSV.read("linked_data/$filename", DataFrame)
     return df
 end
 
-# function filter_particles(linked_data::AbstractDataFrame, filter_settings::NamedTuple)
-#     MIN_AREA = filter_settings.MIN_AREA
-#     MAX_AREA = filter_settings.MAX_AREA
-#     MIN_VELOCITY = filter_settings.MIN_VELOCITY
-#     MIN_DISPLACEMENT = filter_settings.MIN_DISPLACEMENT
-    
-# 	collapsed_data = @by(linked_data, :particle_u, :Area_m_mean = mean(:Area_m), :dp_m_mean = mean(:dp_m),
-#                              :total_displacement_m = first(:total_displacement_m))
-
-# 	n_before_filtering = size(mean_area_df)[1]
-# 	just_right_particles = @subset(mean_area_df, 
-# 		:Area_m_mean .< MAX_AREA,
-# 		:Area_m_mean .> MIN_AREA, 
-# 		:dp_m_mean .> MIN_VELOCITY,
-# 		:total_displacement_m .> MIN_DISPLACEMENT)
-
-# 	@info "filtered by parameters $(size(mean_area_df)[1]) -> $(size(just_right_particles)[1])"
-
-# 	return @subset(linked_data, :particle_u .∈ [just_right_particles.particle_u])
-# end
-
-# filter_settings = (
-#     MIN_VELOCITY = 10.0,  # um / s  
-#     MIN_DIAMETER = 6.75,  # um
-# 	MAX_DIAMETER = 150,  # µm
-# 	MIN_DISPLACEMENT = 300,  # µm
-# )
-
-# filtered_linked_data = MicroTracker.filter_particles(linked_data_with_newcols, filter_settings)
-
-
 """
-    collapse_time_data(df)
+    collapse_data(linked_data::AbstractDataFrame)
 
-Collapse each time-series microbot trajectory into a single row of data for each microbot.
+Collapse each time-series microbot trajectory into a single row of summary data for each microbot.
 
 For full description of each output variable, see these docs (ref needed).
 """
-# function collapse_time_data(df)
-#     @chain df begin  # start a processing pipeline. each line takes the result of the last.
+function collapse_data(linked_data::AbstractDataFrame)
+    output = @chain linked_data begin  # start a processing pipeline. each line takes the result of the last.
 	
-#         # First, collapse the time series data
-#         groupby(:particle_u)  # mini-dataframes for each particle
-#         @combine(
-#             :filename = first(:filename),
-#             :FPS = first(:FPS),
-#             :V = mean(:dv_m), # μm/s,
-#             :Vx = mean(:dx_m),
-#             :Vy = mean(:dy_m),
-#             :Area_m_mean = mean(:Area_m),  # μm^2
-#             #:Ω_est = estimate_omega(:time, :Major_m),  # Hz
-#             :R = maximum(:Major_m) / 2,  # μm
-#             :Circularity = mean(:Circ),
-#         )
+        # Collapse the time series data using a groupby
+        groupby(:particle_unique)  # mini-dataframes for each particle
+        @combine(
+            :filename = first(:filename),
+            :FPS = first(:FPS),
+            :V = mean(:dp_um), # μm/s,
+            :Vx = mean(:dx_um),
+            :Vy = mean(:dy_um),
+            :Area_um_mean = mean(:Area_um),  # μm^2
+            #:Ω_est = estimate_omega(:time, :Major_m),  # Hz
+            :R = maximum(:Major_um) / 2,  # μm
+            :Circularity = mean(:Circ),
+            :total_displacement_um = first(:total_displacement_um),
+        )
 
-#     end
-# end
+    end
+    return output
+end
+
+"""
+    filter_trajectories(collapsed_data::AbstractDataFrame, filter_settings::NamedTuple)
+
+Docs needed.
+"""
+function filter_trajectories(collapsed_data::AbstractDataFrame, filter_settings::NamedTuple)
+    
+	n_before_filtering = size(collapsed_data)[1]
+	just_right_data = @subset(collapsed_data, 
+		:R .< filter_settings.MAX_BOUNDING_RADIUS,
+		:R .> filter_settings.MIN_BOUNDING_RADIUS, 
+		:V .> filter_settings.MIN_VELOCITY,
+		:total_displacement_um .> filter_settings.MIN_DISPLACEMENT)
+    
+    n_after_filtering = size(just_right_data)[1]
+
+	@info "filtered trajectories $(n_before_filtering) -> $(n_after_filtering)"
+
+	return just_right_data
+end
+
+
+
+# filtered_linked_data = MicroTracker.filter_particles(linked_data_with_newcols, filter_settings)

@@ -53,16 +53,6 @@ end
 
 end
 
-@testset "Data Wrangling" begin
-    df = cd(() -> MicroTracker.read_linked_csv("linked_example.csv"), get_assets_path())  # load test data from assets
-    @test "x" in names(df)  # dataframe is successfully loaded
-    @test "particle_unique" in names(df)
-
-    # Collapsing time data
-    # dfg = MicroTracker.collapse_time_data(df)
-    # @test "V" in names(dfg)
-end 
-
 include("linking_tests.jl")
 include("python_interactions.jl")
 
@@ -78,3 +68,4 @@ include("python_interactions.jl")
     @test all(MicroTracker.numerical_derivative(p) .== v_actual)
 end
 
+include("collapsed_tests.jl")
