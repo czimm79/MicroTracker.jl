@@ -65,3 +65,17 @@ end
 
 include("linking_tests.jl")
 include("python_interactions.jl")
+
+@testset "numerical functions" begin
+    xs = 1.0:201 |> collect
+    ys = 2:500 |> collect
+
+    @test MicroTracker.total_displacement(xs, ys) ≈ 536.6600414
+
+    t = 0:200 # 200 frames
+    v_actual = 3.0  # constant velocity
+    p = v_actual .* t .+ 50.0
+    @test all(MicroTracker.numerical_derivative(p) .== v_actual)
+end
+
+MicroTracker.np.gradient(p)

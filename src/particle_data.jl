@@ -1,3 +1,5 @@
+# Functions relating to working on particle_data. I.E., non-linked data from ImageJ.
+
 """
     get_particle_csvs()
 
@@ -25,25 +27,30 @@ end
     load_particle_data(video_name::AbstractString)
     
 Read a particle data `.csv` into a `DataFrame`. Assumes the `.csv` file is in the `particle_data` folder.
+
+If the `.csv` file is from ImageJ, it will:
+1. Extract the frame number from the label column and add it as a new column.
+2. Rename the `X` and `Y` columns to `x` and `y` so it works with `trackpy`.
+3. Remove any blank columns.
 """
 function load_particle_data(video_name::AbstractString)
-    @info "loading particle data for $video_name"
+    @info "Loading particle data for $video_name"
 
     df = CSV.read("particle_data/$video_name.csv", DataFrame)
     @transform!(df, :filename = video_name) # add filename column
 
     if "X" in names(df)  # lets lowercase the column names so it works with trackpy
-        @info " -> looks like ImageJ data, renaming X Y columns to lowercase"
+        @info " -> looks like ImageJ data, extracting frame column and making X Y lowercase."
         rename!(df, Dict("X" => "x", "Y" => "y"))
     end
 
     if "frame" ∉ names(df)
-        @info " -> frame column not found, extracting from label"
+        #@info " -> frame column not found, extracting from label"
         df.frame = [extract_frame_from_label(label) for label in df.Label]
     end
 
     if " " ∈ names(df)
-        @info " -> blank column found, removing"
+        #@info " -> blank column found, removing"
         select!(df, Not(" "))
     end
 
@@ -85,43 +92,8 @@ function add_info_columns_from_filename(df::AbstractDataFrame, translation_dict:
     return df_new
 end
 
-function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
-    SEARCH_RANGE_MICRONS = linking_settings.SEARCH_RANGE_MICRONS
-    MPP = linking_settings.MPP
-    FPS = linking_settings.FPS
-    STUBS_SECONDS = linking_settings.STUBS_SECONDS
-    MEMORY = linking_settings.MEMORY
-    filename = particle_data.filename[1]
-
-    # convert settings in µm to pixels for linker
-    SEARCH_RANGE = trunc(Int, SEARCH_RANGE_MICRONS / MPP / FPS)  # pixels::Int
-	STUBS = trunc(Int64, STUBS_SECONDS * FPS)  # frames
-
-    # This function takes a julia DataFrame, so we need to convert it to python for trackpy
-    py_particle_data = jldf_to_pydf(particle_data)
-
-    @info "Linking $(particle_data.filename[1]) ..."
-    tp.quiet()  # make it quiet, I don't need to see the result of every frame
-    linked = tp.link(py_particle_data, search_range=SEARCH_RANGE, memory=MEMORY)
-    linked_without_stubs = tp.filter_stubs(linked, STUBS)
-
-    @info """  
-        Done! $(linked.particle.nunique()) trajectories present.
-        Filtered out stub trajectories < $(STUBS_SECONDS)s resulting in $(linked_without_stubs.particle.nunique()) trajectories.
-        \n""" 
-
-    jldf = pydf_to_jldf(linked_without_stubs)
-
-    # seems trackpy adds another frame column, remove it for cleanliness
-    if "frame_1" in names(jldf)
-
-        if  jldf.frame == jldf.frame_1
-            select!(jldf, Not("frame_1"))
-        else
-            error("internal error: frame_1 column does not match frame column after linking")
-        end
-    end
-
-    return jldf
-end
-
+# function particle_data_to_linked_results(video_name::AbstractString, translation_dict::Dict)
+#     df = load_particle_data(video_name)
+#     df = add_info_columns_from_filename(df, translation_dict)
+#     return df
+# end

@@ -23,10 +23,14 @@ using Reexport
 
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 
+include("numerical.jl")
+
 include("developer_utilities.jl")
 export get_assets_path
 
-include("linking.jl")
+include("particle_data.jl")
+
+include("linked_data.jl")
 
 include("data_wrangling.jl")
 export read_linked_csv, collapse_time_data
