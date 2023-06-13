@@ -17,19 +17,24 @@ function __init__()
     copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
-using CSV, DataFrames, DataFramesMeta
+using CSV, DataFrames, DataFramesMeta, Dates
 using Optim, Statistics, FFTW
 using Reexport
 
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 
+include("numerical.jl")
+
 include("developer_utilities.jl")
 export get_assets_path
 
-include("linking.jl")
+include("particle_data.jl")
 
-include("data_wrangling.jl")
-export read_linked_csv, collapse_time_data
+include("linked_data.jl")
+export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_timestamp
+
+include("collapsed_data.jl")
+export load_linked_data, collapse_data, filter_trajectories
 
 include("fft.jl")
 export fit_line, fftclean

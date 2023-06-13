@@ -44,7 +44,7 @@ end
 
     @test isdir(testfolder)
     @test isdir("$testfolder/particle_data")
-    @test isdir("$testfolder/linked_results")
+    @test isdir("$testfolder/linked_data")
     @test isdir("$testfolder/original_video")
 
     @test isdir("$testfolder/original_video/5_8p4_28p68")
@@ -53,15 +53,19 @@ end
 
 end
 
-@testset "Data Wrangling" begin
-    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), get_assets_path())  # load test data from assets
-    @test "x" in names(df)  # dataframe is successfully loaded
-    @test "particle_u" in names(df)
-
-    # Collapsing time data
-    dfg = MicroTracker.collapse_time_data(df)
-    @test "V" in names(dfg)
-end 
-
 include("linking_tests.jl")
 include("python_interactions.jl")
+
+@testset "numerical functions" begin
+    xs = 1.0:201 |> collect
+    ys = 2:500 |> collect
+
+    @test MicroTracker.total_displacement(xs, ys) ≈ 536.6600414
+
+    t = 0:200 # 200 frames
+    v_actual = 3.0  # constant velocity
+    p = v_actual .* t .+ 50.0
+    @test all(MicroTracker.numerical_derivative(p) .== v_actual)
+end
+
+include("collapsed_tests.jl")
