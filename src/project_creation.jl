@@ -4,7 +4,7 @@ function create_project(folder::AbstractString; include_examples=false)
 
     mkdir(folder)
     mkdir("$folder/particle_data")
-    mkdir("$folder/linked_results")
+    mkdir("$folder/linked_data")
     mkdir("$folder/original_video")
 
     if include_examples

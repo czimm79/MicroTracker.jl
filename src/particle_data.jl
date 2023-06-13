@@ -1,12 +1,13 @@
 # Functions relating to working on particle_data. I.E., non-linked data from ImageJ.
 
 """
-    get_particle_csvs()
+    get_names_in_particle_data()
 
 Return a list of all `.csv` files contained in the `particle_data` folder.
 """
-function get_particle_csvs()
-    filter!(x->occursin(".csv", x), readdir("particle_data"))
+function get_names_in_particle_data()
+    csv_vector = filter!(x->occursin(".csv", x), readdir("particle_data"))
+    [split(x, ".")[1] for x in csv_vector]  # remove the .csv extension
 end
 
 """

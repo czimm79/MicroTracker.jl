@@ -86,13 +86,76 @@ function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::Na
 	return output
 end
 
-# FILTER
+"""
+    particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
+
+Process particle data into linked trajectory data while calculating instantaneous velocity and other salient data.
+Returns a `DataFrame` that can then be saved to `linked_data` using [`save_linked_data_with_timestamp`](@ref).
+
+A particle data csv corresponding to `video_name` must be present in the `particle_data` folder.
+The `translation_dict`` is a dictionary detailing the information contained in the filename. For full explanation, 
+see the MicroTracker docs (ref needed).
+
+```jldoctest
+julia> 1 + 1
+2
+```
+"""
+function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
+    particle_data = load_particle_data(video_name)
+    particle_data_with_exp_info = add_info_columns_from_filename(particle_data, translation_dict)
+    linked_data = link(particle_data_with_exp_info, linking_settings)
+    linked_data_with_useful_columns = add_useful_columns(linked_data, linking_settings)
+
+    return linked_data_with_useful_columns
+end
 
 
-# DO IT ALL
+"""
+    batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple)
 
-# function particle_data_to_linked_results(video_name::AbstractString, translation_dict::Dict)
-#     df = load_particle_data(video_name)
-#     df = add_info_columns_from_filename(df, translation_dict)
-#     return df
-# end
+Process all `.csv` files in `particle_data` into linked trajectory data and concatenate the results.
+
+Returns a `DataFrame` containing all linked data for the entire experimental array. This is also saved to `linked_data` 
+using [`save_linked_data_with_timestamp`](@ref) for further analysis.
+
+The `translation_dict`` is a dictionary detailing the information contained in the filename. For full explanation, 
+see the MicroTracker docs (ref needed).
+
+```jldoctest
+julia> 1 + 1
+2
+```
+"""
+function batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple; save_to_csv=true)
+    all_names = get_names_in_particle_data()
+
+    output = DataFrame()  # create empty dataframe to store all linked df's
+    for video_name in all_names
+        linked_data = particle_data_to_linked_data(video_name, translation_dict, linking_settings)
+        output = vcat(output, linked_data)
+    end
+
+    if save_to_csv
+        save_linked_data_with_timestamp(output)
+    end
+
+    return output
+end
+
+
+"""
+    save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
+
+Save final linked data to `linked_data` folder with a timestamped filename.
+
+```jldoctest
+julia> 1 + 1
+3
+```
+"""
+function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
+    datetime = Dates.format(Dates.now(), "yyyy-mm-dd_THH-MM")
+	CSV.write("linked_data/$(datetime).csv", linked_data)
+    @info "Saved to linked_data/$(datetime).csv"
+end

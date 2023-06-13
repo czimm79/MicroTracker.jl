@@ -44,7 +44,7 @@ end
 
     @test isdir(testfolder)
     @test isdir("$testfolder/particle_data")
-    @test isdir("$testfolder/linked_results")
+    @test isdir("$testfolder/linked_data")
     @test isdir("$testfolder/original_video")
 
     @test isdir("$testfolder/original_video/5_8p4_28p68")
@@ -54,9 +54,9 @@ end
 end
 
 @testset "Data Wrangling" begin
-    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), get_assets_path())  # load test data from assets
+    df = cd(() -> MicroTracker.read_linked_csv("linked_example.csv"), get_assets_path())  # load test data from assets
     @test "x" in names(df)  # dataframe is successfully loaded
-    @test "particle_u" in names(df)
+    @test "particle_unique" in names(df)
 
     # Collapsing time data
     # dfg = MicroTracker.collapse_time_data(df)

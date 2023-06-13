@@ -17,7 +17,7 @@ function __init__()
     copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
-using CSV, DataFrames, DataFramesMeta
+using CSV, DataFrames, DataFramesMeta, Dates
 using Optim, Statistics, FFTW
 using Reexport
 
@@ -31,6 +31,7 @@ export get_assets_path
 include("particle_data.jl")
 
 include("linked_data.jl")
+export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_timestamp
 
 include("collapsed_data.jl")
 export read_linked_csv, collapse_time_data
