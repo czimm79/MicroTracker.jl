@@ -53,15 +53,8 @@ end
 
 end
 
-@testset "simple asset copy" begin
-    MicroTracker.simple_example_asset_copy()
-    @test isfile("test_example_script.jl")
-    rm("test_example_script.jl")
-end
-
 @testset "Data Wrangling" begin
-    assets_path = joinpath(dirname(pwd()), "assets")
-    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), assets_path)  # load test data from assets
+    df = cd(() -> MicroTracker.read_linked_csv("2023-02-20_T15-48.csv"), get_assets_path())  # load test data from assets
     @test "x" in names(df)  # dataframe is successfully loaded
     @test "particle_u" in names(df)
 

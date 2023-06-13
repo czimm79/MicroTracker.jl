@@ -9,12 +9,22 @@ using PyCall
 
 const np = PyNULL()
 const tp = PyNULL()
+const pd = PyNULL()
 
 function __init__()
     copy!(np, pyimport_conda("numpy", "numpy"))
     copy!(tp, pyimport_conda("trackpy", "trackpy"))
+    copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
+using CSV, DataFrames, DataFramesMeta
+using Optim, Statistics, FFTW
+using Reexport
+
+@reexport using DataFramesMeta  # This also reexports DataFrames for users
+
+include("developer_utilities.jl")
+export get_assets_path
 
 include("linking.jl")
 
