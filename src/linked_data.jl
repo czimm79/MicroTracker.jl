@@ -52,3 +52,47 @@ function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
     return jldf
 end
 
+"""
+    add_useful_columns(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
+
+After linking, add some useful columns to the dataframe. 
+
+These include dx, dy, dp (velocity), and size measurements in microns. 
+(more detailed docs needed if this is an interface for users)
+"""
+function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
+    MPP = linking_settings.MPP
+    FPS = linking_settings.FPS
+    filename = linked_data.filename[1]
+
+    output = @chain linked_data begin
+		@transform(:particle_unique = filename * "-" .* string.(:particle))
+		
+		groupby(:particle)
+		@transform(:dx = numerical_derivative(:x),
+				   :dy = numerical_derivative(:y),
+				   :total_displacement_um = abs(total_displacement(:x, :y)) * MPP)
+		@transform(:dp = @. √(:dx^2 + :dy^2))
+		@transform(:time = :frame / FPS,
+				   :dx_um = :dx * FPS * MPP,
+				   :dy_um = :dy * FPS * MPP,
+				   :dp_um = :dp * FPS * MPP,
+				   :Area_um = :Area * MPP .^2,
+				   :Major_um = :Major * MPP,
+				   :Minor_um = :Minor * MPP,
+				   :FPS = FPS)
+	end
+	
+	return output
+end
+
+# FILTER
+
+
+# DO IT ALL
+
+# function particle_data_to_linked_results(video_name::AbstractString, translation_dict::Dict)
+#     df = load_particle_data(video_name)
+#     df = add_info_columns_from_filename(df, translation_dict)
+#     return df
+# end

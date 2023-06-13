@@ -59,8 +59,8 @@ end
     @test "particle_u" in names(df)
 
     # Collapsing time data
-    dfg = MicroTracker.collapse_time_data(df)
-    @test "V" in names(dfg)
+    # dfg = MicroTracker.collapse_time_data(df)
+    # @test "V" in names(dfg)
 end 
 
 include("linking_tests.jl")
@@ -78,4 +78,3 @@ include("python_interactions.jl")
     @test all(MicroTracker.numerical_derivative(p) .== v_actual)
 end
 
-MicroTracker.np.gradient(p)

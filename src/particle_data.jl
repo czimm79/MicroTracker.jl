@@ -47,11 +47,18 @@ function load_particle_data(video_name::AbstractString)
     if "frame" ∉ names(df)
         #@info " -> frame column not found, extracting from label"
         df.frame = [extract_frame_from_label(label) for label in df.Label]
+
+        # after we have the frame column, we don't need the Label column anymore
+        select!(df, Not(:Label))
     end
 
     if " " ∈ names(df)
         #@info " -> blank column found, removing"
         select!(df, Not(" "))
+    end
+
+    if "Circ." in names(df)  # imageJ puts a period in this column and it screws with things
+        rename!(df, Dict("Circ." => "Circ"))
     end
 
     return df
@@ -92,8 +99,3 @@ function add_info_columns_from_filename(df::AbstractDataFrame, translation_dict:
     return df_new
 end
 
-# function particle_data_to_linked_results(video_name::AbstractString, translation_dict::Dict)
-#     df = load_particle_data(video_name)
-#     df = add_info_columns_from_filename(df, translation_dict)
-#     return df
-# end

@@ -32,7 +32,7 @@ include("particle_data.jl")
 
 include("linked_data.jl")
 
-include("data_wrangling.jl")
+include("collapsed_data.jl")
 export read_linked_csv, collapse_time_data
 
 include("fft.jl")
