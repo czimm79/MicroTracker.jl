@@ -148,11 +148,6 @@ end
     save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
 
 Save final linked data to `linked_data` folder with a timestamped filename.
-
-```jldoctest
-julia> 1 + 1
-3
-```
 """
 function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
     datetime = Dates.format(Dates.now(), "yyyy-mm-dd_THH-MM")
