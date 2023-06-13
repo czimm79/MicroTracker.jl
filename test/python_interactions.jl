@@ -20,9 +20,10 @@ end
 
     @test jldf |> typeof == DataFrame
     @test names(jldf) == ["a", "b", "c"]
-end
-    
-# test converting a julia dataframe to a python dataframe
+
+    # test converting a julia dataframe to a python dataframe
     second_pydf = MicroTracker.jldf_to_pydf(jldf)
     @test second_pydf |> typeof == MicroTracker.PyCall.PyObject
     @test (second_pydf == pydf).all().all()  # check that the dataframes are equal
+
+end
