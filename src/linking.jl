@@ -53,10 +53,10 @@ end
 """
     add_info_columns_from_filename(df::AbstractDataFrame, translation_dict::AbstractDict)
 
-Extract experimental metadata from a filename. Uses a dictionary to translate what data is where.
+Extract experimental metadata from the `filename` column and create a new column for each.
 
-Assumes the filename is separated by underscores and periods are denoted by `p`. For full explanation, see
-the MicroTracker docs (ref needed).
+Assumes the filename is separated by underscores and periods are denoted by `p`. The `translation_dict`
+details the filename format. For full explanation, see the MicroTracker docs (ref needed).
 
 # Example
 ```jldoctest
@@ -84,3 +84,44 @@ function add_info_columns_from_filename(df::AbstractDataFrame, translation_dict:
     end
     return df_new
 end
+
+function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
+    SEARCH_RANGE_MICRONS = linking_settings.SEARCH_RANGE_MICRONS
+    MPP = linking_settings.MPP
+    FPS = linking_settings.FPS
+    STUBS_SECONDS = linking_settings.STUBS_SECONDS
+    MEMORY = linking_settings.MEMORY
+    filename = particle_data.filename[1]
+
+    # convert settings in µm to pixels for linker
+    SEARCH_RANGE = trunc(Int, SEARCH_RANGE_MICRONS / MPP / FPS)  # pixels::Int
+	STUBS = trunc(Int64, STUBS_SECONDS * FPS)  # frames
+
+    # This function takes a julia DataFrame, so we need to convert it to python for trackpy
+    py_particle_data = jldf_to_pydf(particle_data)
+
+    @info "Linking $(particle_data.filename[1]) ..."
+    tp.quiet()  # make it quiet, I don't need to see the result of every frame
+    linked = tp.link(py_particle_data, search_range=SEARCH_RANGE, memory=MEMORY)
+    linked_without_stubs = tp.filter_stubs(linked, STUBS)
+
+    @info """  
+        Done! $(linked.particle.nunique()) trajectories present.
+        Filtered out stub trajectories < $(STUBS_SECONDS)s resulting in $(linked_without_stubs.particle.nunique()) trajectories.
+        \n""" 
+
+    jldf = pydf_to_jldf(linked_without_stubs)
+
+    # seems trackpy adds another frame column, remove it for cleanliness
+    if "frame_1" in names(jldf)
+
+        if  jldf.frame == jldf.frame_1
+            select!(jldf, Not("frame_1"))
+        else
+            error("internal error: frame_1 column does not match frame column after linking")
+        end
+    end
+
+    return jldf
+end
+

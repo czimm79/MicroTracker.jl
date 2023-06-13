@@ -23,3 +23,32 @@ function get_assets_path()
 
     return assets_path
 end
+
+"""
+    pydf_to_jldf(pydf)
+
+Convert a `pandas.DataFrame` to a `DataFrame` (from `DataFrames.jl`). Used internally to interface with
+`trackpy`.
+"""
+function pydf_to_jldf(pydf)
+    jldf = CSV.File(IOBuffer(pydf.to_csv())) |> DataFrame
+    # when converting, the python index is created as a new column named "column1". Delete it.
+    "Column1" in names(jldf) && select!(jldf, Not("Column1"))
+    
+    return jldf
+end
+
+"""
+    jldf_to_pydf(jldf)
+
+Convert a `DataFrame` (from `DataFrames.jl`) to a `pandas.DataFrame`. Used internally to interface with
+`trackpy`.
+"""
+function jldf_to_pydf(jldf)
+    io = IOBuffer()
+    CSV.write(io, jldf)
+    seekstart(io)
+    pydf = pd.read_csv(io)
+    
+    return pydf
+end

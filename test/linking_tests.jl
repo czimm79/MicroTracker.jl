@@ -21,3 +21,28 @@
     # checking if all keys are present as columns
     @test all(collect(keys(test_translation_dict)) .∈ Ref(names(df_with_added_cols)))
 end
+
+@testset "Linking" begin
+linking_settings = (
+    FPS = 61.35,
+    MPP = 0.605,  # Microns per pixel, scale of objective.
+    
+    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling.
+								# Determines "how far" to look to link.
+    MEMORY = 10,  # number of frames the blob can dissapear and still be remembered
+    STUBS_SECONDS = 2.0,  # trajectory needs to exist for at least this many seconds 
+)
+
+df_test = cd(() -> MicroTracker.load_particle_data("5_13p5_61p35"), get_assets_path())
+
+df_linked = MicroTracker.link(df_test, linking_settings)
+@test df_linked.particle |> unique |> length == 16  # 16 particles in the test data with stubs of 2 seconds
+
+end
+
+# filter_settings = (
+#     MIN_VELOCITY = 10.0,  # um / s  
+#     MIN_DIAMETER = 6.75,  # um
+# 	MAX_DIAMETER = 150,  # µm
+# 	MIN_DISPLACEMENT = 300,  # µm
+# )
