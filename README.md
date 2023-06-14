@@ -1,4 +1,4 @@
-# MicroTracker.jl
+<h1><img alt="MicroTracker.jl" src="https://github.com/czimm79/MicroTracker.jl/assets/49537407/a6562792-4953-46cb-8e3a-7eba9ba8ee06" width=426 height=81.4 ></h1>
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/)
