@@ -14,11 +14,12 @@ authors:
       affiliation: 1
 affiliations:
     - name: Department of Chemical and Biological Engineering, Colorado School of Mines
+bibliography: paper.bib
 ---
 
 # Summary
 
-Microbots are active matter capable of performing remote work at the micro-scale. They are of particular interest for biomedical applications and drug delivery due to their ability to target and provide local mechanical action [@zimmermann_multimodal_2022]. However, at the micron scale, traditional propulsion methods such as propellors do not work. Instead, microbot designs mimic nature, like bacterial flagella that corkscrew through fluid[eye_micropropellors] or white blood cells that roll on vascular surfaces[some_rollers]. The field of microrobotics is rapidly expanding and is laser focused on researching new structures, fabrication techniques, and actuation methods. This is amplified by the recent adoption of nano-scale 3d printing techniques [nanoscribe_paper] and human-scale remote magnetic actuation equipment [something_from_nelson]. 
+Microbots are active matter capable of performing remote work at the micro-scale. They are of particular interest for biomedical applications and drug delivery due to their ability to target and provide local mechanical action [@Zimmermann:2022]. However, at the micron scale, traditional propulsion methods such as propellors do not work. Instead, microbot designs mimic nature, like bacterial flagella that corkscrew through fluid[eye_micropropellors] or white blood cells that roll on vascular surfaces[some_rollers]. The field of microrobotics is rapidly expanding and is laser focused on researching new structures, fabrication techniques, and actuation methods. This is amplified by the recent adoption of nano-scale 3d printing techniques [nanoscribe_paper] and human-scale remote magnetic actuation equipment [something_from_nelson]. 
 
 Microbot research requires quantitatevely measuring the velocity, rotation rate, and size of hundreds of structures under varying actuation and environmental conditions. Efficient software tools are needed to quickly and easily process this large amount of experimental data. With this information, microbot design can be further informed to increase the locomotion efficiency and suitability for a variety of fluidic environments, such as the vascular, pulmonary, and digestive systems.
 
