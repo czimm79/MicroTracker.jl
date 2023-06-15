@@ -17,9 +17,10 @@ function __init__()
     copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
-using CSV, DataFrames, DataFramesMeta, Dates
-using Optim, Statistics, FFTW
+using CSV, DataFrames, DataFramesMeta, Dates  # data manipulation
+using Optim, Statistics, FFTW  # FFT
 using Reexport
+#using CairoMakie, GLMakie, AlgebraOfGraphics  # plotting for publication and interactives
 
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 
@@ -42,5 +43,7 @@ export fit_line, fftclean
 include("project_creation.jl")
 export create_project
 
+#include("plotting.jl")
+#export basic_plot, example_plot
 
 end

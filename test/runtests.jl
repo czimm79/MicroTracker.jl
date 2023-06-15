@@ -69,3 +69,4 @@ include("python_interactions.jl")
 end
 
 include("collapsed_tests.jl")
+include("plot_tests.jl")
