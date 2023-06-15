@@ -68,7 +68,7 @@ function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::Na
     output = @chain linked_data begin
 		@transform(:particle_unique = filename * "-" .* string.(:particle))
 		
-		groupby(:particle)
+		groupby(:particle_unique)
 		@transform(:dx = numerical_derivative(:x),
 				   :dy = numerical_derivative(:y),
 				   :total_displacement_um = total_displacement(:x, :y) * MPP)
