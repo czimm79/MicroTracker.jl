@@ -50,3 +50,50 @@
     @test size(batch_final_linked_data) == (11834, 30)
 end
 
+#@testset "Trajectory clipping" begin
+    # setup
+    sample_video_resolution = (2000, 2000)
+
+    # particle 1, all out of bounds
+    xs_1 = 0:2000
+    ys_1 = fill(20, length(xs_1))
+    name_1 = "test-1"
+    Major_1 = 200.0
+    frame_1 = 1:length(xs_1)
+
+    # particle 2, all in bounds
+    xs_2 = 400:800
+    ys_2 = 1 * xs_2
+    name_2 = "test-2"
+    Major_2 = 50.0
+    frame_2 = 1:length(xs_2)
+
+    # particle 3, partially in bounds
+    xs_3 = 0:2000
+    ys_3 = 0:2000
+    name_3 = "test-3"
+    Major_3 = 60.0
+    frame_3 = 1:length(xs_3)
+
+    # create a test dataframe
+    trajectory_clip_test_df = DataFrame(x = vcat(xs_1, xs_2, xs_3), y = vcat(ys_1, ys_2, ys_3), 
+        particle_unique = vcat(fill(name_1, length(xs_1)), fill(name_2, length(xs_2)),  fill(name_3, length(xs_3))),
+        Major = vcat(fill(Major_1, length(xs_1)), fill(Major_2, length(xs_2)), fill(Major_3, length(xs_3))),
+        frame = vcat(frame_1, frame_2, frame_3))
+
+    # groupby particle
+    gdf = groupby(trajectory_clip_test_df, :particle_unique)
+
+    # inbounds
+    @test MicroTracker.inbounds(gdf[1][1, :], 50.0, sample_video_resolution) == false
+    @test MicroTracker.inbounds(gdf[1][1, :], 20.0, sample_video_resolution) == false
+    @test MicroTracker.inbounds(gdf[2][1, :], 100.0, sample_video_resolution) == true
+
+    # find bounds
+    @test MicroTracker.find_trajectory_bounds(gdf[1], sample_video_resolution) == (-1, -1) # all out of bounds
+    @test MicroTracker.find_trajectory_bounds(gdf[2], sample_video_resolution) == (1, 401) # all inbounds
+    @test MicroTracker.find_trajectory_bounds(gdf[3], sample_video_resolution) == (31, 1971) # clip both sides
+
+
+
+#end

@@ -53,6 +53,11 @@ end
 
 end
 
+#@testset "Image loading and manipulation" begin
+    # cd(MicroTracker.simple_load, get_assets_path())
+    # get_assets_path()
+#end
+
 include("linking_tests.jl")
 include("python_interactions.jl")
 

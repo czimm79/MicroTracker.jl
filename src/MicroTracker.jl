@@ -1,4 +1,4 @@
-__precompile__() # this module is safe to precompile
+__precompile__() # this module is safe to precompile, needed for pycall
 module MicroTracker
 
 # For linking, we use trackpy's linker, so we need an interface to 1 python function
@@ -28,6 +28,8 @@ include("numerical.jl")
 
 include("developer_utilities.jl")
 export get_assets_path
+
+include("image_manipulation.jl")
 
 include("particle_data.jl")
 

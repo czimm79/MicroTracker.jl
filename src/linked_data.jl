@@ -110,7 +110,6 @@ function particle_data_to_linked_data(video_name::AbstractString, translation_di
     return linked_data_with_useful_columns
 end
 
-
 """
     batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple)
 
@@ -143,7 +142,6 @@ function batch_particle_data_to_linked_data(translation_dict::Dict, linking_sett
     return output
 end
 
-
 """
     save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
 
@@ -153,4 +151,70 @@ function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
     datetime = Dates.format(Dates.now(), "yyyy-mm-dd_THH-MM")
 	CSV.write("linked_data/$(datetime).csv", linked_data)
     @info "Saved to linked_data/$(datetime).csv"
+end
+
+# Trajectory clipping functions
+
+"""
+    inbounds(row::DataFrameRow, radius::AbstractFloat, video_resolution::Tuple{Int, Int})
+Check if dataframe row is in bounds. This is a single row in a dataframe of a single particle's trajectory.
+    
+This looks at x and y coordinates and checks if they are within `radius` of the edge of the video.
+"""
+function inbounds(row::DataFrameRow, radius::AbstractFloat, video_resolution::Tuple{Int, Int})
+	if (row.x < radius) | (row.x > video_resolution[1]-radius)
+		# X is out of bounds
+		return false
+	elseif (row.y < radius) | (row.y > video_resolution[2]-radius)
+		# Y is out of bounds
+		return false
+	else
+		return true
+	end
+end
+
+"""
+	find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolution::Tuple{Int, Int})
+Return a tuple of frame numbers, `(low, high)` where all trajectory points are in bounds.
+
+This calculates the radius of the particle, then iterates forward and backward from the center of the trajectory
+until it finds a point that is out of bounds. This is the high and low bound of the trajectory.
+"""
+function find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolution::Tuple{Int, Int})
+	# particle name
+    particle_name = df_1particle.particle_unique[1]
+
+    # find radius
+	radius = maximum(df_1particle.Major) / 2
+
+	# Find midpoint, or center of trajectory idxs
+	nrows, ncols = size(df_1particle)
+	center_idx = trunc(Int, (nrows - 1) / 2)
+
+	# initialize idxs
+	high_break_idx = nrows
+	low_break_idx = 1
+
+	# iterate forward
+	for (idx, i) in pairs(eachrow(df_1particle)[center_idx:end-1])
+		if !inbounds(i, radius, video_resolution)
+			if idx == 1 
+				@warn "Center point of trajectory $particle_name is out of bounds. Removing..."
+                return (-1, -1)
+			end
+			
+			high_break_idx = center_idx + idx - 2
+			break
+		end
+	end
+
+	# iterate backwards
+	for (idx, i) in pairs(reverse(eachrow(df_1particle)[2:center_idx]))
+		if !inbounds(i, radius, video_resolution)
+			low_break_idx = center_idx - idx + 2
+			break
+		end
+	end
+
+	return (df_1particle.frame[low_break_idx], df_1particle.frame[high_break_idx])
 end
