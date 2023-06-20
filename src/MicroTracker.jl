@@ -20,7 +20,7 @@ end
 using CSV, DataFrames, DataFramesMeta, Dates  # data manipulation
 using Optim, Statistics, FFTW  # FFT
 using Reexport
-#using CairoMakie, GLMakie, AlgebraOfGraphics  # plotting for publication and interactives
+using CairoMakie
 
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 

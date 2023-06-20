@@ -54,8 +54,25 @@ end
 end
 
 #@testset "Image loading and manipulation" begin
-    # cd(MicroTracker.simple_load, get_assets_path())
-    # get_assets_path()
+    # image name parsing
+    @test MicroTracker.framefromimagename("a0001.tif") == 1
+    @test MicroTracker.framefromimagename("a0001.png") == 1
+    @test MicroTracker.framefromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == 985
+    @test MicroTracker.framefromimagename("05_23_8_2 kept stack0005.tif") == 5
+
+    @test MicroTracker.imagenamedigitlength("05_23_8_2 kept stack0001.tif") == 4
+    @test MicroTracker.imagenamedigitlength("05_23_8_2 kept stack00001.tif") == 5
+    @test MicroTracker.imagenamedigitlength("a0003.png") == 4
+
+    @test MicroTracker.fileextension("a0001.tif") == "tif"
+    @test MicroTracker.fileextension("05_23_8_2 kept stack0001.png") == "png"
+
+    @test MicroTracker.prefixfromimagename("05_23_8_2 kept stack0001.tif") == "05_23_8_2 kept stack"
+    @test MicroTracker.prefixfromimagename("a0001.tif") == "a"
+    @test MicroTracker.prefixfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == "5 24p9 1 2022-04-04-16-30-31-16-a-"
+    
+    @test cd(()->MicroTracker.loadframe("5_8p4_28p68", 3), get_assets_path()) |> size == (1312, 1312)
+    @test_throws ErrorException cd(()->MicroTracker.loadframe("this_doesnt_exist", 3), get_assets_path())
 #end
 
 include("linking_tests.jl")
