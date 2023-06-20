@@ -6,10 +6,10 @@ Get the relevant frame number from the name of an image.
 
 *Example*
 ```jldoctest
-julia> framefromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif")
+julia> MicroTracker.framefromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif")
 985
 
-julia> framefromimagename("05_23_8_2 kept stack0001.tif")
+julia> MicroTracker.framefromimagename("05_23_8_2 kept stack0001.tif")
 1
 ```
 """
@@ -36,7 +36,7 @@ Get the length of the digits quantifying the frame in the image name. Used to ca
 
 # Example
 ```jldoctest
-julia> imagenamedigitlength("05_23_8_2 kept stack0001.tif")
+julia> MicroTracker.imagenamedigitlength("05_23_8_2 kept stack0001.tif")
 4
 ```
 """
@@ -58,7 +58,7 @@ Get the file extension from the image name.
 
 # Example
 ```jldoctest
-julia> fileextension("a0001.tif")
+julia> MicroTracker.fileextension("a0001.tif")
 "tif"
 ```
 """
@@ -77,10 +77,10 @@ Return the prefix from the name of an image. This is everything besides the `<fr
 
 *Example*
 ```jldoctest
-julia> prefixfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif")
+julia> MicroTracker.prefixfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif")
 "5 24p9 1 2022-04-04-16-30-31-16-a-"
 
-julia> prefixfromimagename("05_23_8_2 kept stack0001.tif")
+julia> MicroTracker.prefixfromimagename("05_23_8_2 kept stack0001.tif")
 "05_23_8_2 kept stack"
 ```
 """
