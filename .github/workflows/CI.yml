@@ -32,7 +32,17 @@ jobs:
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-      - uses: julia-actions/cache@v1
+      #- uses: julia-actions/cache@v1
+      - name: Cache 📖
+        uses: actions/cache@v2
+        with:
+          path: |
+                ${{ env.SITE_FOLDER }}/__cache
+                ${{ env.SITE_FOLDER }}/__site
+                ~/.julia/artifacts
+                ~/.julia/packages
+                !~/.julia/packages/PyCall
+                !~/.julia/packages/Conda
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
