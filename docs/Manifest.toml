@@ -395,7 +395,7 @@ uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 version = "2.28.2+0"
 
 [[deps.MicroTracker]]
-deps = ["BenchmarkTools", "CSV", "DataFrames", "DataFramesMeta", "Dates", "FFTW", "Optim", "PyCall", "Reexport", "Statistics"]
+deps = ["BenchmarkTools", "CSV", "Conda", "DataFrames", "DataFramesMeta", "Dates", "FFTW", "Optim", "PyCall", "Reexport", "Statistics"]
 path = ".."
 uuid = "f2f4b30c-0e7b-4018-b992-2f46df5706a6"
 version = "0.1.0"
