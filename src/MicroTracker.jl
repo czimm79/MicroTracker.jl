@@ -5,7 +5,7 @@ module MicroTracker
 # See PyCall docs on how this was set up
 # https://github.com/JuliaPy/PyCall.jl#quick-start
 
-using PyCall  # maybe import conda first?
+using Conda, PyCall 
 
 const np = PyNULL()
 const tp = PyNULL()
