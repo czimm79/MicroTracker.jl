@@ -1,6 +1,37 @@
 # Functions relating to the linking of particle data and subsequent wrangling of those linked results.
 
 """
+    find_relevant_FPS(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
+
+Used to allow for the FPS to be specified in the filename, or in the linking_settings. 
+
+If FPS is in the particle_data, it will be used. If FPS is in the linking_settings, it will be used. If FPS is in both, an error will be thrown.
+"""
+function find_relevant_FPS(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
+    # two cases: FPS has already been added by [`add_info_columns_from_filename`](@ref), or it is in the named tuple
+    is_FPS_in_linking_settings = haskey(linking_settings, :FPS)
+    is_FPS_in_particle_data = "FPS" in names(particle_data)
+
+    if is_FPS_in_linking_settings && is_FPS_in_particle_data
+        error("""FPS is in both the particle_data and the linking_settings. FPS should only be in one or the other.
+        1) If your videos are all the same FPS, just put the FPS in the linking_settings. Do not have it in the translation_dict.
+        2) If your videos are different FPS, FPS should not be in the linking_settings. It should be in the translation_dict to be parsed from the filename.
+        """)
+
+    elseif is_FPS_in_particle_data
+        typeof(particle_data.FPS[1]) <: AbstractFloat || error("FPS in particle_data is not a Float. Is it being parsed as a string?")
+        return particle_data.FPS[1]
+    
+    elseif is_FPS_in_linking_settings
+        return linking_settings.FPS
+    
+    else # FPS is not in either
+        error("FPS is not in either the particle_data or the linking_settings. FPS should be in one or the other.")
+    end
+
+end
+
+"""
     link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
 
 Use trackpy to link particle data into trajectories across frames.
@@ -8,14 +39,14 @@ Use trackpy to link particle data into trajectories across frames.
 `linking_settings` is a `NamedTuple` with the following all caps fields:
 - `SEARCH_RANGE_MICRONS::Float64`:  microns/s. Fastest a particle could be traveling.
 - `MPP::Float64`: Microns per pixel, scale of objective.
-- `FPS::Float64`: Frames per second.
+- `FPS::Float64`: Frames per second. **Can omit if the FPS has been specified in the filename.**
 - `STUBS_SECONDS::Float64`: seconds. All trajectories that exist less than this will be removed.
 - `MEMORY::Int64`: Number of frames the particle can dissapear and still be remembered.
 """
 function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
     SEARCH_RANGE_MICRONS = linking_settings.SEARCH_RANGE_MICRONS
     MPP = linking_settings.MPP
-    FPS = linking_settings.FPS
+    FPS = find_relevant_FPS(particle_data, linking_settings)
     STUBS_SECONDS = linking_settings.STUBS_SECONDS
     MEMORY = linking_settings.MEMORY
     filename = particle_data.filename[1]
@@ -24,10 +55,13 @@ function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
     SEARCH_RANGE = trunc(Int, SEARCH_RANGE_MICRONS / MPP / FPS)  # pixels::Int
 	STUBS = trunc(Int64, STUBS_SECONDS * FPS)  # frames
 
+    # As long as we have it, add FPS as a column before linking
+    @transform!(particle_data, :FPS = FPS)
+
     # This function takes a julia DataFrame, so we need to convert it to python for trackpy
     py_particle_data = jldf_to_pydf(particle_data)
 
-    @info "Linking $(particle_data.filename[1]) ..."
+    @info "Linking $(filename) ..."
     tp.quiet()  # make it quiet, I don't need to see the result of every frame
     linked = tp.link(py_particle_data, search_range=SEARCH_RANGE, memory=MEMORY)
     linked_without_stubs = tp.filter_stubs(linked, STUBS)
@@ -36,6 +70,8 @@ function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
         Done! $(linked.particle.nunique()) trajectories present.
         Filtered out stub trajectories < $(STUBS_SECONDS)s resulting in $(linked_without_stubs.particle.nunique()) trajectories.
         \n""" 
+
+    linked_without_stubs.particle.nunique() == 0 && error("No trajectories left after filtering stubs! Try decreasing STUBS_SECONDS.")
 
     jldf = pydf_to_jldf(linked_without_stubs)
 
@@ -62,7 +98,6 @@ These include dx, dy, dp (velocity), and size measurements in microns.
 """
 function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
     MPP = linking_settings.MPP
-    FPS = linking_settings.FPS
     filename = linked_data.filename[1]
 
     output = @chain linked_data begin
@@ -73,14 +108,13 @@ function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::Na
 				   :dy = numerical_derivative(:y),
 				   :total_displacement_um = total_displacement(:x, :y) * MPP)
 		@transform(:dp = @. √(:dx^2 + :dy^2))
-		@transform(:time = :frame / FPS,
-				   :dx_um = :dx * FPS * MPP,
-				   :dy_um = :dy * FPS * MPP,
-				   :dp_um = :dp * FPS * MPP,
+		@transform(:time = :frame ./ :FPS,
+				   :dx_um = :dx .* :FPS * MPP,
+				   :dy_um = :dy .* :FPS * MPP,
+				   :dp_um = :dp .* :FPS * MPP,
 				   :Area_um = :Area * MPP .^2,
 				   :Major_um = :Major * MPP,
-				   :Minor_um = :Minor * MPP,
-				   :FPS = FPS)
+				   :Minor_um = :Minor * MPP)
 	end
 	
 	return output
@@ -104,12 +138,12 @@ julia> 1 + 1
 function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
     particle_data = load_particle_data(video_name)
     particle_data_with_exp_info = add_info_columns_from_filename(particle_data, translation_dict)
+    MicroTracker.add_resolution_column!(particle_data_with_exp_info) # add resolution column inplace
     linked_data = link(particle_data_with_exp_info, linking_settings)
     linked_data_with_useful_columns = add_useful_columns(linked_data, linking_settings)
 
     return linked_data_with_useful_columns
 end
-
 
 """
     batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple)
@@ -143,7 +177,6 @@ function batch_particle_data_to_linked_data(translation_dict::Dict, linking_sett
     return output
 end
 
-
 """
     save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
 
@@ -153,4 +186,102 @@ function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
     datetime = Dates.format(Dates.now(), "yyyy-mm-dd_THH-MM")
 	CSV.write("linked_data/$(datetime).csv", linked_data)
     @info "Saved to linked_data/$(datetime).csv"
+end
+
+# Trajectory clipping functions
+
+"""
+    inbounds(row::DataFrameRow, radius::AbstractFloat, video_resolution::Tuple{Int, Int})
+Check if dataframe row is in bounds. This is a single row in a dataframe of a single particle's trajectory.
+    
+This looks at x and y coordinates and checks if they are within `radius` of the edge of the video.
+"""
+function inbounds(row::DataFrameRow, radius::AbstractFloat, video_resolution::Tuple{Int, Int})
+	if (row.x < radius) | (row.x > video_resolution[1]-radius)
+		# X is out of bounds
+		return false
+	elseif (row.y < radius) | (row.y > video_resolution[2]-radius)
+		# Y is out of bounds
+		return false
+	else
+		return true
+	end
+end
+
+"""
+	find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolution::Tuple{Int, Int})
+Return a tuple of frame numbers, `(low, high)` where all trajectory points are in bounds.
+
+This calculates the radius of the particle, then iterates forward and backward from the center of the trajectory
+until it finds a point that is out of bounds. This is the high and low bound of the trajectory.
+"""
+function find_trajectory_bounds(df_1particle::AbstractDataFrame)
+    unique(df_1particle.particle_unique) |> length > 1 && error("More than one particle in df_1particle")
+    video_resolution = df_1particle.video_resolution[1]
+
+	# particle name
+    particle_name = df_1particle.particle_unique[1]
+
+    # find radius
+	radius = maximum(df_1particle.Major) / 2
+
+	# Find midpoint, or center of trajectory idxs
+	nrows, ncols = size(df_1particle)
+	center_idx = trunc(Int, (nrows - 1) / 2)
+
+	# initialize idxs
+	high_break_idx = nrows
+	low_break_idx = 1
+
+	# iterate forward
+	for (idx, i) in pairs(eachrow(df_1particle)[center_idx:end-1])
+		if !inbounds(i, radius, video_resolution)
+			if idx == 1 
+				@warn "Center point of trajectory $particle_name is out of bounds."
+                return (-1, -1)
+			end
+			
+			high_break_idx = center_idx + idx - 2
+			break
+		end
+	end
+
+	# iterate backwards
+	for (idx, i) in pairs(reverse(eachrow(df_1particle)[2:center_idx]))
+		if !inbounds(i, radius, video_resolution)
+			low_break_idx = center_idx - idx + 2
+			break
+		end
+	end
+
+	return (df_1particle.frame[low_break_idx], df_1particle.frame[high_break_idx])
+end
+
+"""
+	clip_trajectory_edges(linked_data::AbstractDataFrame)
+Iterate through each trajectory and remove the tracking data where the particle is out of frame.
+
+The particle is out of frame when the center is within the radius of the particle from the edge of the video.
+"""
+function clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
+    STUBS_SECONDS = linking_settings.STUBS_SECONDS
+
+	gdf = groupby(linked_data, :particle_unique)
+	snipped_trajectory_dfs = DataFrame[]
+	
+	for i in gdf
+        FPS = i.FPS[1]
+        STUBS = STUBS = trunc(Int64, STUBS_SECONDS * FPS)  # frames
+        
+		frames = find_trajectory_bounds(i)
+		#@info "Clipping info" frames first(i.particle_unique)
+		j = @subset(i, :frame .> frames[1], :frame .< frames[2])
+		if size(j)[1] < STUBS
+			@warn "Snipped trajectory from $(first(i.particle_unique)) is now too short. Deleting."
+			continue
+		end
+		push!(snipped_trajectory_dfs, j)
+	end
+	
+	reduce(vcat, snipped_trajectory_dfs)
 end
