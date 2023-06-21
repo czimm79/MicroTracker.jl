@@ -3,7 +3,16 @@ test_linking_settings = (
     MPP = 0.605,  # Microns per pixel, scale of objective.
     SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling.
                                 # Determines "how far" to look to link.
-    MEMORY = 10,  # number of frames the blob can dissapear and still be remembered
+    MEMORY = 0,  # number of frames the blob can dissapear and still be remembered
+    STUBS_SECONDS = 0.5,  # trajectory needs to exist for at least this many seconds 
+)
+
+bad_linking_settings = (
+    FPS = 61.35,
+    MPP = 0.605,  # Microns per pixel, scale of objective.
+    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling.
+                                # Determines "how far" to look to link.
+    MEMORY = 0,  # number of frames the blob can dissapear and still be remembered
     STUBS_SECONDS = 2.0,  # trajectory needs to exist for at least this many seconds 
 )
 
@@ -36,7 +45,7 @@ test_linking_settings = (
 
     # Linking with trackpy
     fresh_linked_data = MicroTracker.link(particle_data_with_added_cols, test_linking_settings)
-    @test fresh_linked_data.particle |> unique |> length == 16  # 16 particles in the test data with stubs of 2 seconds
+    @test fresh_linked_data.particle |> unique |> length == 21  # 21 particles in the test data with stubs of 0.5 seconds
 
     # Add useful columns like dx, dy, dp (velocity), and size measurements in microns
     linked_data_with_newcols = MicroTracker.add_useful_columns(fresh_linked_data, test_linking_settings)
@@ -49,9 +58,12 @@ test_linking_settings = (
     @test final_linked_data == linked_data_with_newcols
 
     # test that the batch process function works
-    batch_final_linked_data = cd( () -> batch_particle_data_to_linked_data(test_translation_dict, test_linking_settings; save_to_csv=false),
+    @test_throws ErrorException cd(()->batch_particle_data_to_linked_data(test_translation_dict, bad_linking_settings; save_to_csv=false),
         get_assets_path())
-    @test size(batch_final_linked_data) == (11834, 31)
+
+    batch_final_linked_data = cd(()->batch_particle_data_to_linked_data(test_translation_dict, test_linking_settings; save_to_csv=false),
+        get_assets_path())
+    @test size(batch_final_linked_data) == (5147, 31)
 end
 
 @testset "Trajectory clipping" begin

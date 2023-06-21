@@ -37,6 +37,8 @@ function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
         Filtered out stub trajectories < $(STUBS_SECONDS)s resulting in $(linked_without_stubs.particle.nunique()) trajectories.
         \n""" 
 
+    linked_without_stubs.particle.nunique() == 0 && error("No trajectories left after filtering stubs! Try decreasing STUBS_SECONDS.")
+
     jldf = pydf_to_jldf(linked_without_stubs)
 
     # seems trackpy adds another frame column, remove it for cleanliness
