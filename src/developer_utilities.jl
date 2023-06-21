@@ -16,7 +16,7 @@ function get_assets_path()
         assets_path = joinpath(dirname(dirname(pwd())), "assets") # go up two directories
    
     # we're running tests
-    elseif occursin("test", pwd())
+    elseif basename(pwd()) == "test"
         assets_path = joinpath(dirname(pwd()), "assets")
     
      # we're using the package

@@ -1,7 +1,7 @@
 """
     create_project_here(;include_examples=false)
 
-In the current working directory, create the folder structure for a MicroTracker project.
+Create the folder structure for a MicroTracker project *in the current working directory*.
 
 If `include_examples` is true, then example particle data and videos will be included.
 """
