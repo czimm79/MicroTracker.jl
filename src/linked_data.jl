@@ -104,6 +104,7 @@ julia> 1 + 1
 function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
     particle_data = load_particle_data(video_name)
     particle_data_with_exp_info = add_info_columns_from_filename(particle_data, translation_dict)
+    MicroTracker.add_resolution_column!(particle_data_with_exp_info) # add resolution column inplace
     linked_data = link(particle_data_with_exp_info, linking_settings)
     linked_data_with_useful_columns = add_useful_columns(linked_data, linking_settings)
 
@@ -180,7 +181,10 @@ Return a tuple of frame numbers, `(low, high)` where all trajectory points are i
 This calculates the radius of the particle, then iterates forward and backward from the center of the trajectory
 until it finds a point that is out of bounds. This is the high and low bound of the trajectory.
 """
-function find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolution::Tuple{Int, Int})
+function find_trajectory_bounds(df_1particle::AbstractDataFrame)
+    unique(df_1particle.particle_unique) |> length > 1 && error("More than one particle in df_1particle")
+    video_resolution = df_1particle.video_resolution[1]
+
 	# particle name
     particle_name = df_1particle.particle_unique[1]
 
@@ -199,7 +203,7 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolutio
 	for (idx, i) in pairs(eachrow(df_1particle)[center_idx:end-1])
 		if !inbounds(i, radius, video_resolution)
 			if idx == 1 
-				@warn "Center point of trajectory $particle_name is out of bounds. Removing..."
+				@warn "Center point of trajectory $particle_name is out of bounds."
                 return (-1, -1)
 			end
 			
@@ -217,4 +221,32 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame, video_resolutio
 	end
 
 	return (df_1particle.frame[low_break_idx], df_1particle.frame[high_break_idx])
+end
+
+"""
+	clip_trajectory_edges(linked_data::AbstractDataFrame)
+Iterate through each trajectory and remove the tracking data where the particle is out of frame.
+
+The particle is out of frame when the center is within the radius of the particle from the edge of the video.
+"""
+function clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
+    STUBS_SECONDS = linking_settings.STUBS_SECONDS
+    FPS = linking_settings.FPS
+    STUBS = trunc(Int64, STUBS_SECONDS * FPS)  # frames
+
+	gdf = groupby(linked_data, :particle_unique)
+	snipped_trajectory_dfs = DataFrame[]
+	
+	for i in gdf
+		frames = find_trajectory_bounds(i)
+		#@info "Clipping info" frames first(i.particle_unique)
+		j = @subset(i, :frame .> frames[1], :frame .< frames[2])
+		if size(j)[1] < STUBS
+			@warn "Snipped trajectory from $(first(i.particle_unique)) is now too short. Deleting."
+			continue
+		end
+		push!(snipped_trajectory_dfs, j)
+	end
+	
+	reduce(vcat, snipped_trajectory_dfs)
 end

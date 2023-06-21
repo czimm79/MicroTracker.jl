@@ -53,27 +53,29 @@ end
 
 end
 
-#@testset "Image loading and manipulation" begin
+@testset "Image loading and manipulation" begin
     # image name parsing
-    @test MicroTracker.framefromimagename("a0001.tif") == 1
-    @test MicroTracker.framefromimagename("a0001.png") == 1
-    @test MicroTracker.framefromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == 985
-    @test MicroTracker.framefromimagename("05_23_8_2 kept stack0005.tif") == 5
+    @test MicroTracker.getframenumfromimagename("a0001.tif") == 1
+    @test MicroTracker.getframenumfromimagename("a0001.png") == 1
+    @test MicroTracker.getframenumfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == 985
+    @test MicroTracker.getframenumfromimagename("05_23_8_2 kept stack0005.tif") == 5
 
-    @test MicroTracker.imagenamedigitlength("05_23_8_2 kept stack0001.tif") == 4
-    @test MicroTracker.imagenamedigitlength("05_23_8_2 kept stack00001.tif") == 5
-    @test MicroTracker.imagenamedigitlength("a0003.png") == 4
+    @test MicroTracker.getimagenamedigitlength("05_23_8_2 kept stack0001.tif") == 4
+    @test MicroTracker.getimagenamedigitlength("05_23_8_2 kept stack00001.tif") == 5
+    @test MicroTracker.getimagenamedigitlength("a0003.png") == 4
 
-    @test MicroTracker.fileextension("a0001.tif") == "tif"
-    @test MicroTracker.fileextension("05_23_8_2 kept stack0001.png") == "png"
+    @test MicroTracker.getfileextension("a0001.tif") == "tif"
+    @test MicroTracker.getfileextension("05_23_8_2 kept stack0001.png") == "png"
 
-    @test MicroTracker.prefixfromimagename("05_23_8_2 kept stack0001.tif") == "05_23_8_2 kept stack"
-    @test MicroTracker.prefixfromimagename("a0001.tif") == "a"
-    @test MicroTracker.prefixfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == "5 24p9 1 2022-04-04-16-30-31-16-a-"
+    @test MicroTracker.getprefixfromimagename("05_23_8_2 kept stack0001.tif") == "05_23_8_2 kept stack"
+    @test MicroTracker.getprefixfromimagename("a0001.tif") == "a"
+    @test MicroTracker.getprefixfromimagename("5 24p9 1 2022-04-04-16-30-31-16-a-985.tif") == "5 24p9 1 2022-04-04-16-30-31-16-a-"
     
-    @test cd(()->MicroTracker.loadframe("5_8p4_28p68", 3), get_assets_path()) |> size == (1312, 1312)
-    @test_throws ErrorException cd(()->MicroTracker.loadframe("this_doesnt_exist", 3), get_assets_path())
-#end
+    @test cd(()->loadframe("5_8p4_28p68", 3), get_assets_path()) |> size == (1312, 1312)
+    @test_throws ErrorException cd(()->loadframe("this_doesnt_exist", 3), get_assets_path())
+
+    @test cd(()->getvideoresolution("5_8p4_28p68"), get_assets_path()) == (1312, 1312)
+end
 
 include("linking_tests.jl")
 include("python_interactions.jl")

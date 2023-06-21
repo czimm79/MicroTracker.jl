@@ -30,11 +30,13 @@ include("developer_utilities.jl")
 export get_assets_path
 
 include("image_manipulation.jl")
+export loadframe, getvideoresolution
 
 include("particle_data.jl")
 
 include("linked_data.jl")
 export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_timestamp
+export find_trajectory_bounds, clip_trajectory_edges
 
 include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories

@@ -66,7 +66,7 @@ function load_particle_data(video_name::AbstractString)
 end
 
 """
-    add_info_columns_from_filename(df::AbstractDataFrame, translation_dict::AbstractDict)
+    add_info_columns_from_filename(particle_data::AbstractDataFrame, translation_dict::AbstractDict)
 
 Extract experimental metadata from the `filename` column and create a new column for each.
 
@@ -79,12 +79,12 @@ julia> test_filename = "5_13p5_61p35"
 "5_13p5_61p35"
 ```
 """
-function add_info_columns_from_filename(df::AbstractDataFrame, translation_dict::Dict)
+function add_info_columns_from_filename(particle_data::AbstractDataFrame, translation_dict::Dict)
     @info "adding info columns: $(keys(translation_dict))"
 
-    df_new = copy(df)
+    df_new = copy(particle_data)
 
-    filename = df.filename[1]
+    filename = particle_data.filename[1]
     filename_with_periods = replace(filename, "p" => ".")
     split_filename = split(filename_with_periods, "_")
 
@@ -100,3 +100,12 @@ function add_info_columns_from_filename(df::AbstractDataFrame, translation_dict:
     return df_new
 end
 
+"""
+    add_resolution_column(particle_data::AbstractDataFrame)
+
+Look at a frame of the video in `original_video` which corresponds to the data and add a column.
+"""
+function add_resolution_column!(particle_data::AbstractDataFrame)
+        res = getvideoresolution(particle_data.filename[1])
+        @transform!(particle_data, :video_resolution = res)
+end
