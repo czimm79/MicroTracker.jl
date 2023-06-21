@@ -1,8 +1,6 @@
 test_linking_settings = (
-    FPS = 61.35,
     MPP = 0.605,  # Microns per pixel, scale of objective.
-    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling.
-                                # Determines "how far" to look to link.
+    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling. # Determines "how far" to look to link.
     MEMORY = 0,  # number of frames the blob can dissapear and still be remembered
     STUBS_SECONDS = 0.5,  # trajectory needs to exist for at least this many seconds 
 )
@@ -10,34 +8,46 @@ test_linking_settings = (
 bad_linking_settings = (
     FPS = 61.35,
     MPP = 0.605,  # Microns per pixel, scale of objective.
-    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling.
-                                # Determines "how far" to look to link.
+    SEARCH_RANGE_MICRONS = 1000, # microns/s. Fastest a particle could be traveling. # Determines "how far" to look to link.
     MEMORY = 0,  # number of frames the blob can dissapear and still be remembered
     STUBS_SECONDS = 2.0,  # trajectory needs to exist for at least this many seconds 
 )
 
+test_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, Float64))
+bad_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, String))
+
 @testset "Particle data to linked data" begin
-    # test that the particle data is accessible
+    # Is there example particle data?
     video_names = cd(MicroTracker.get_names_in_particle_data, get_assets_path())  # load test data from assets
     @test video_names == ["5_13p5_61p35", "5_8p4_28p68"]
 
-    # test that the frame number can be extracted from a Label that ImageJ generates
+    # Can the frame number can be extracted from a Label that ImageJ generates?
     test_label = "5_13p5_61p35:slice:363"
     test_label2 = "5_8p3_1:a_00001"
     @test MicroTracker.extract_frame_from_label(test_label) == 363
     @test MicroTracker.extract_frame_from_label(test_label2) == 1
 
-    # test that the particle data can be loaded into a dataframe
+    # Can the particle data be loaded into a dataframe?
     particle_data = cd(() -> MicroTracker.load_particle_data("5_13p5_61p35"), get_assets_path())
     @test "x" in names(particle_data)
 
     # test that info columns can be added to the dataframe, make sure one is a string
     test_filename = "5_13p5_61p35"
-    test_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, String))
+
+    particle_data_with_added_cols_strFPS = MicroTracker.add_info_columns_from_filename(particle_data, bad_translation_dict)
+    @test particle_data_with_added_cols_strFPS.FPS[1] == "61.35"
 
     particle_data_with_added_cols = MicroTracker.add_info_columns_from_filename(particle_data, test_translation_dict)
     # checking if all keys are present as columns
     @test all(collect(keys(test_translation_dict)) .∈ Ref(names(particle_data_with_added_cols)))
+    @test particle_data_with_added_cols.FPS[1] == 61.35
+
+    # Can the relevant FPS be found, in the variable FPS case and the constant FPS case?
+    @test_throws ErrorException MicroTracker.find_relevant_FPS(particle_data_with_added_cols_strFPS, (;FPS=30.0)) # in both
+    @test_throws ErrorException MicroTracker.find_relevant_FPS(particle_data_with_added_cols_strFPS, (;BLAH="meaningless")) # FPS is a string
+    @test_throws ErrorException MicroTracker.find_relevant_FPS(select(particle_data_with_added_cols, Not(:FPS)), (;BLAH="meaningless")) # FPS is nowhere
+    @test MicroTracker.find_relevant_FPS(select(particle_data_with_added_cols, Not(:FPS)), (;FPS=30.0)) == 30.0 # FPS is constant in tuple
+    @test MicroTracker.find_relevant_FPS(particle_data_with_added_cols, (;BLAH="meaningless")) == 61.35 # FPS is in the dataframe from the filename
 
     # add resolution
     cd(()->MicroTracker.add_resolution_column!(particle_data_with_added_cols), get_assets_path())
@@ -99,6 +109,9 @@ end
         frame = vcat(frame_1, frame_2, frame_3),
         video_resolution = vcat(fill(video_resolution_1, length(xs_1)), fill(video_resolution_2, length(xs_2)), fill(video_resolution_3, length(xs_3))))
 
+    # add fps column, assume constant for here
+    @transform!(trajectory_clip_test_df, :FPS = 30.0)
+    
     # groupby particle
     gdf = groupby(trajectory_clip_test_df, :particle_unique)
 

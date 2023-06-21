@@ -40,15 +40,20 @@ end
 @testset "Project Creation" begin
     # use the create project function and then check that the folders are there
     testfolder = "deletethis"
-    create_project(testfolder, include_examples=true)
+    mkdir(testfolder)
+    cd(testfolder)
 
-    @test isdir(testfolder)
-    @test isdir("$testfolder/particle_data")
-    @test isdir("$testfolder/linked_data")
-    @test isdir("$testfolder/original_video")
+    create_project_here(include_examples=true)
 
-    @test isdir("$testfolder/original_video/5_8p4_28p68")
+    @test isdir("particle_data")
+    @test isdir("linked_data")
+    @test isdir("original_video")
+    @test isdir("original_video/5_8p4_28p68")
 
+    # create an imagej macro
+    create_imagej_macro_here(MPP=0.605, minimum_segmentation_diameter=4.5)
+    @test isfile("imagej_macro.ijm")
+    cd("..")
     rm(testfolder, recursive=true)
 
 end

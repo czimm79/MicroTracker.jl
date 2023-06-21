@@ -45,7 +45,7 @@ include("fft.jl")
 export fit_line, fftclean
 
 include("project_creation.jl")
-export create_project
+export create_project_here, create_imagej_macro_here
 
 #include("plotting.jl")
 #export basic_plot, example_plot
