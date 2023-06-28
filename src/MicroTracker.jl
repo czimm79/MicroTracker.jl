@@ -45,7 +45,4 @@ export find_trajectory_bounds, clip_trajectory_edges
 include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories
 
-#include("plotting.jl")
-#export basic_plot, example_plot
-
 end
