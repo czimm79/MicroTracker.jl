@@ -15,6 +15,8 @@ include("numerical_tests.jl")
     @test isdir("linked_data")
     @test isdir("original_video")
     @test isdir("original_video/5_8p4_28p68")
+    example_linked_data_filename = "(B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0, STUBS_SECONDS = 0.5).csv"
+    @test isfile("linked_data/$example_linked_data_filename")
 
     # create an imagej macro
     create_imagej_macro_here(MPP=0.605, minimum_segmentation_diameter=4.5)

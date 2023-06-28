@@ -29,6 +29,14 @@ function create_project_here(;include_examples=false)
         for video_path in example_video_paths
             cp(video_path, joinpath("original_video", basename(video_path)))
         end
+
+        # copy over linked data
+        example_linked_data_path = joinpath(assets_path, "linked_data")
+        example_linked_data_paths = [joinpath(example_linked_data_path, i) for i in readdir(example_linked_data_path)]
+
+        for linked_data_path in example_linked_data_paths
+            cp(linked_data_path, joinpath("linked_data", basename(linked_data_path)))
+        end
     end
     @info "New MicroTracker project created in $(pwd())"
 end

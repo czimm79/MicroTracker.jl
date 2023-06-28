@@ -75,9 +75,6 @@ FPSstring_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS
         get_assets_path())
     @test size(batch_final_linked_data) == (5147, 31)
 
-    # test saving
-    #save_linked_data_with_metadata(batch_final_linked_data, test_translation_dict, test_linking_settings)
-    #test_translation_dict |> string
 end
 
 @testset "Trajectory clipping" begin

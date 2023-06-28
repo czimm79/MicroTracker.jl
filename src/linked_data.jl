@@ -171,7 +171,7 @@ function batch_particle_data_to_linked_data(translation_dict::Dict, linking_sett
     end
 
     if save_to_csv
-        save_linked_data_with_timestamp(output)
+        save_linked_data_with_metadata(output, translation_dict, linking_settings)
     end
 
     return output
@@ -192,8 +192,9 @@ end
 save linked data with metadata
 """
 function save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
-    metadata = translation_dict
-    @info metadata
+    dictstring = MicroTracker.translation_dict_to_string(translation_dict)
+    filename = "($dictstring) - $(string(linking_settings))"
+    CSV.write("linked_data/$filename.csv", linked_data)
 end
 
 # Trajectory clipping functions
