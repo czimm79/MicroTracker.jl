@@ -188,6 +188,14 @@ function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
     @info "Saved to linked_data/$(datetime).csv"
 end
 
+"""
+save linked data with metadata
+"""
+function save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
+    metadata = translation_dict
+    @info metadata
+end
+
 # Trajectory clipping functions
 
 """

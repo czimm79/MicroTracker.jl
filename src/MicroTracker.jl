@@ -25,9 +25,13 @@ using CairoMakie
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 
 include("numerical.jl")
+export fit_line, fftclean
 
 include("developer_utilities.jl")
 export get_assets_path
+
+include("project_creation.jl")
+export create_project_here, create_imagej_macro_here
 
 include("image_manipulation.jl")
 export loadframe, getvideoresolution
@@ -35,17 +39,11 @@ export loadframe, getvideoresolution
 include("particle_data.jl")
 
 include("linked_data.jl")
-export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_timestamp
+export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_metadata
 export find_trajectory_bounds, clip_trajectory_edges
 
 include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories
-
-include("fft.jl")
-export fit_line, fftclean
-
-include("project_creation.jl")
-export create_project_here, create_imagej_macro_here
 
 #include("plotting.jl")
 #export basic_plot, example_plot
