@@ -27,7 +27,7 @@ function collapse_data(linked_data::AbstractDataFrame)
             :Vx = mean(:dx_um),
             :Vy = mean(:dy_um),
             :Area_um_mean = mean(:Area_um),  # μm^2
-            #:Ω_est = estimate_omega(:time, :Major_m),  # Hz
+            :Ω_est = estimate_omega(:time, :Major_um),  # Hz
             :R = maximum(:Major_um) / 2,  # μm
             :Circularity = mean(:Circ),
             :total_displacement_um = first(:total_displacement_um),

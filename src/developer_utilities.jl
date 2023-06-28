@@ -16,7 +16,7 @@ function get_assets_path()
         assets_path = joinpath(dirname(dirname(pwd())), "assets") # go up two directories
    
     # we're running tests
-    elseif occursin("test", pwd())
+    elseif basename(pwd()) == "test"
         assets_path = joinpath(dirname(pwd()), "assets")
     
      # we're using the package
@@ -56,3 +56,21 @@ function jldf_to_pydf(jldf)
     
     return pydf
 end
+
+"""
+    translation_dict_to_string(translation_dict::Dict)
+
+Convert a dictionary into a string that can be used as a filename. Used internally to save linked_data.
+
+# Example
+```jldoctest
+julia> test_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, Float64));
+
+julia> MicroTracker.translation_dict_to_string(test_translation_dict)
+"B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)"
+```
+"""
+function translation_dict_to_string(translation_dict::Dict)
+    return join([string(k, "=", repr(v)) for (k, v) in translation_dict], ", ")
+end
+

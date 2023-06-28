@@ -14,7 +14,7 @@ bad_linking_settings = (
 )
 
 test_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, Float64))
-bad_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, String))
+FPSstring_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, String))
 
 @testset "Particle data to linked data" begin
     # Is there example particle data?
@@ -34,7 +34,7 @@ bad_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3,
     # test that info columns can be added to the dataframe, make sure one is a string
     test_filename = "5_13p5_61p35"
 
-    particle_data_with_added_cols_strFPS = MicroTracker.add_info_columns_from_filename(particle_data, bad_translation_dict)
+    particle_data_with_added_cols_strFPS = MicroTracker.add_info_columns_from_filename(particle_data, FPSstring_translation_dict)
     @test particle_data_with_added_cols_strFPS.FPS[1] == "61.35"
 
     particle_data_with_added_cols = MicroTracker.add_info_columns_from_filename(particle_data, test_translation_dict)
@@ -69,11 +69,12 @@ bad_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3,
 
     # test that the batch process function works
     @test_throws ErrorException cd(()->batch_particle_data_to_linked_data(test_translation_dict, bad_linking_settings; save_to_csv=false),
-        get_assets_path())
+        get_assets_path())  # FPS is a string and stubs is too large
 
     batch_final_linked_data = cd(()->batch_particle_data_to_linked_data(test_translation_dict, test_linking_settings; save_to_csv=false),
         get_assets_path())
     @test size(batch_final_linked_data) == (5147, 31)
+
 end
 
 @testset "Trajectory clipping" begin
