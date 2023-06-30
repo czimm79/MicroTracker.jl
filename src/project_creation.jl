@@ -11,9 +11,13 @@ function create_project_here(;include_examples=false)
     mkdir("linked_data")
     mkdir("original_video")
 
-    if include_examples
-        assets_path = get_assets_path()
+    assets_path = get_assets_path()
 
+    # copy over notebook
+    notebook_path = joinpath(assets_path, "microtracker+pluto.jl")
+    cp(notebook_path, joinpath(pwd(), "microtracker+pluto.jl"))
+
+    if include_examples
         # copy over particle data
         example_data_path = joinpath(assets_path, "particle_data")
         example_data_paths = [joinpath(example_data_path, i) for i in readdir(example_data_path)]
@@ -41,15 +45,80 @@ function create_project_here(;include_examples=false)
     @info "New MicroTracker project created in $(pwd())"
 end
 
-function create_imagej_macro_here(;MPP, minimum_segmentation_diameter)
+function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::Float64)
     filename = "imagej_macro.ijm"
     io = open(filename, "w")
 
     # write some text to the file
     text = """
-    Hello, world! I am in:
-    $(pwd())
-    I have a MPP of $MPP and a minimum segmentation diameter of $minimum_segmentation_diameter.
+    microtracker_directory = $(pwd())
+
+    input_folder = microtracker_directory + "/original_video"
+    output_folder = microtracker_directory + "/particle_data"
+
+    // min_size Calculation and Explanation
+    // I want to exclude imaging artifacts (dust, speck on camera) that would be less than a monomer, accounting for
+    // optical imaging artifacts. The corona of the colloid extends to about 1.5sigma, or 6.75 um diameter.
+    // If you're not getting monomers tracked, decrease minimum_segmentation_diameter by ~20% until they are!
+    // You'll have another chance to filter based on size when linking, so I see this as the 'coarse' step.
+    bead_d = $minimum_segmentation_diameter  // µm
+    MPP = $MPP  // microns per pixel. unique to your microscope setup!
+    min_size_guess = PI * (bead_d * 1.5 / MPP / 2)^2   // pixels^2
+    min_size = min_size_guess  // pixels^2
+
+    THRESHOLD = 110  // ONLY used if constant threshold binary is enabled. Commented out by default.
+
+    function batch(input_folder, output_folder, outline_folder) {
+        // Looks inside input_folder and for each image stack, uses the process function on it.
+        list = getFileList(input_folder);
+        //print(list.length);
+        for (i = 0; i < list.length; i++){
+            name = substring(list[i], 0, lengthOf(list[i]) - 1);  // removes trailing bracket
+            process(name, input_folder, output_folder, outline_folder);
+    }
+    }
+
+    function process(stack_name, input_folder, output_folder, outline_folder) {
+        // Do image processing on stack_name and output results in a csv to output_folder.
+        stack_path = input_folder + "/" + stack_name + "/";
+        output_path = output_folder + "/" + stack_name + ".csv";
+        outline_path = outline_folder + "/" + stack_name + "/a.tif";
+        outline_directory = outline_folder + "/" + stack_name;
+        
+        // Process
+        print(stack_name);
+        run("Image Sequence...", "select=&stack_path dir=&stack_path sort");
+
+        // Constant threshold binary
+    //	run("Threshold...");
+    //	setThreshold(0, THRESHOLD);
+    //	setOption("BlackBackground", true);
+    //	run("Convert to Mask", "method=Default background=Light black");
+    //	run("Close");
+
+        // Other way of making binary without choosing a threshold. Works similar, can use this if wanted.
+        run("Make Binary", "method=Default background=Default calculate black");
+        
+        run("Set Measurements...", "area centroid center circularity fit display redirect=None decimal=3");
+        run("Analyze Particles...", "size=min_size-Infinity show=Outlines display clear stack");
+    // show=Outlines
+
+        run("Close");
+        run("Close");
+        
+        // Save outlines
+    //	File.makeDirectory(outline_directory);
+    //	run("Image Sequence... ", "format=TIFF name=a save=outline_path");
+    //	close();
+
+        
+        saveAs("Results", output_path);
+
+
+    }
+
+
+    batch(input_folder, output_folder, outline_folder)
     """
     print(io, text)
 

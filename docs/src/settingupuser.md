@@ -1,4 +1,9 @@
 # Setting Up
+On this page, you will
+1. Download and install Julia.
+2. Create a project folder with a matching Julia environment.
+3. Add MicroTracker and other necessary packages to your environment.
+4. Create an organized folder structure for your project using MicroTracker.
 
 ## Download and install Julia
 Download and install Julia from their website [https://julialang.org/downloads/]. Be sure to check the "Add Julia to PATH" checkmark. This allows you to call Julia anywhere from the command line by typing `julia` !
@@ -12,7 +17,7 @@ Open a terminal window and type `julia`. You should be able to run simple comman
 
 
 ## Creating an environment for your project
-Alright! Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.
+Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.
 
 To do this, just create a new empty folder. Name it descriptively, like `2023-06-21 microwheel field sweep`. For this page, I'll just create a folder named `tutorial`.
 
@@ -24,14 +29,14 @@ Now, type `]` at the empty `julia>` prompt, before typing anything else. This en
 (@v1.9) pkg> activate .
 Activating new project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
 
-(tutorial) pkg> add MicroTracker
+(tutorial) pkg> add MicroTracker Pluto CairoMakie GLMakie
 ...output snipped
 ```
 
-and wait as the package and all of its dependencies download! 
+and wait as the packages and all of their dependencies download! 
 
 !!! important 
-    When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as MicroTracker comes bundled with all the packages needed to analyze and plot your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
+    When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as this environment contains everything needed to process and visualize your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
 
 ## Create a MicroTracker project
 Now that we have a new Julia environment in this folder with MicroTracker installed, lets start using MicroTracker! To import a package, Julia uses the keyword `using`. Make sure you're out of package mode by pressing `backspace`. The prompt should read `julia>` again. After that, we'll use the [`create_project_here`](@ref) function.
@@ -55,8 +60,12 @@ tutorial/
 │   ├── 5_8p4_28p68
 │   └── 5_13p5_61p35
 ├── linked_data/
+│   └── (B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0,   
+│        STUBS_SECONDS = 0.5).csv
+└── notebook.jl
 ```
 
-- **original_video**: The raw microscopy video goes here, in the Image Sequence format (folders of `.tif` images). Many microscopes output automatically in this format, or [Fiji](https://imagej.net/software/fiji/) can be used to save almost any format into the Image Sequence format.
-- **particle_data**: This is where a `.csv` file for each video, with the same filename, will be located. These csv files are the result of segmentation, which is explained thoroughly in the next page of the manual!
-- **linked_data**: This is the primary output of MicroTracker. This is where `.csv` files are output that contains data for *every* microbot across *all* videos. This ensures that all analysis is carried out with the same parameters.
+- `original_video` The raw microscopy video goes here, in the Image Sequence format (folders of `.tif` images). Many microscopes output automatically in this format, or [Fiji](https://imagej.net/software/fiji/) can be used to save almost any format into the Image Sequence format.
+- `particle_data` This is where a `.csv` file for each video, with the same filename, will be located. These csv files are the result of segmentation, which is explained thoroughly in the next page of the manual!
+- `linked_data` This is the primary output of MicroTracker. This is where `.csv` files are output that contains data for *every* microbot across *all* videos. This ensures that all analysis is carried out with the same parameters.
+- `notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.

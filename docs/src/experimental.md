@@ -1,14 +1,26 @@
 # Experimental
+On this page, you'll learn how best to set up your experiment and microscopy for microbot tracking with MicroTracker.
 
-## Setup
-A study contains multiple independent variables (temperature, field strength, microbot design, viscosity, geometry). You'll have a separate video for each of these.
+## Filenames keep track of variables
+A study can contain multiple independent variables (temperature, field strength, microbot design, viscosity, geometry). MicroTracker can handle as many variables as you'd like, provided there is a separate video at each experimental condition.
 
-An example! Lets say we're studying temperature and field strength. Name your video names accordingly. Talk about file naming formats.
+For example, lets say we're studying temperature and field strength. A convenient way to keep track of experimental conditions is to include it in the filename, and MicroTracker is designed to parse and collect information from each video filename. If I had temperature and field strength to record, my completed set of videos would look like this:
 
-## Crop and clip your video
+```
+"32_4_1"
+"37_4_1"
+"37_4_2"
+"32_6p2_1"
+```
 
-ImageJ (Fiji) is used to look at microscopy vids
+I would take note that the first number is the temperature in celsius, the second number is the field in mT, and the third number is the # of videos I've taken at that condition.
 
-## Segment and make binary through thresholding
+You can set your own format, but notice two requirements for your file naming format:
+1. Underscores (`_`) are used to separate conditions.
+2. Instead of periods, the letter `p` is used. `6.2` turns into `6p2`.
 
-Have a macro here to do that:
+## Contrast is important
+For successful tracking, the microbots must have good contrast with their background, especially for simple thresholding techniques like that detailed in [Segmentation](@ref). If your experiments do not easily lend themselves to a contrasting and uniform background, look into advanced methods of segmentation like [ilastik](https://www.ilastik.org/) or applying additional filters with ImageJ.
+
+## Clean up before you analyze
+Use ImageJ or any other video editor to clip out parts of the video you can't use, like when there are no microbots on the screen or when you move the microscope.

@@ -146,12 +146,12 @@ function particle_data_to_linked_data(video_name::AbstractString, translation_di
 end
 
 """
-    batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple)
+    batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple; save_to_csv=true)
 
 Process all `.csv` files in `particle_data` into linked trajectory data and concatenate the results.
 
 Returns a `DataFrame` containing all linked data for the entire experimental array. This is also saved to `linked_data` 
-using [`save_linked_data_with_timestamp`](@ref) for further analysis.
+using [`save_linked_data_with_metadata`](@ref) for further analysis.
 
 The `translation_dict`` is a dictionary detailing the information contained in the filename. For full explanation, 
 see the MicroTracker docs (ref needed).
