@@ -10,6 +10,7 @@ Using a notebook environment like Pluto or Jupyter doesn't work well when develo
 2. Ensure you can run a hello world julia script, detailed in the [getting started](https://www.julia-vscode.org/docs/stable/gettingstarted/) page.
 3. Get accustomed to running code in the integrated Julia REPL in VSCode using keybinds like `shift+enter` and `ctrl+enter`. This is also detailed in the extension docs [here](https://www.julia-vscode.org/docs/stable/userguide/runningcode/).
 4. Add [Revise.jl](https://timholy.github.io/Revise.jl/stable/) to your base Julia environment. By default, the VSCode Julia extension detects that its available and automatically loads it when starting a Julia extension integrated REPL in VSCode.
+5. Install [git](https://git-scm.com/downloads).
 
 ## GitHub Desktop
 1. Download [Github Desktop](https://desktop.github.com/).
@@ -27,7 +28,7 @@ The dependent packages for MicroTracker normally automatically install behind th
 2. You should be able to run the `test` command in the `pkg` mode and all tests should pass. You are now ready to make changes!
 
 !!! note
-    When opening the package, sometimes VSCode will automatically recognize that the MicroTracker environment should be activated, and do it for you. If this is the case, instead of `(v1.8)`, you'll see `MicroTracker`, and you can skip step 2.
+    When opening the package, sometimes VSCode will automatically recognize that the MicroTracker environment should be activated and prompt you. If this is the case, instead of `(v1.8)`, you'll see `MicroTracker`, and you can skip step 2.
 
 ## Common hiccups
 1. Sometimes when changing the dependencies of MicroTracker, the CI for the docs will fail. I fixed this by activating the docs env using `activate ./docs` and then `resolve`.

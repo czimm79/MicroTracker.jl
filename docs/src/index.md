@@ -6,9 +6,6 @@ CurrentModule = MicroTracker
 
 Welcome to the documentation for [MicroTracker](https://github.com/czimm79/MicroTracker.jl) - a Julia package for analyzing microscopy videos of microbots.
 
-!!! warning
-    This repository is under construction and not ready for use.
-
 ## What can it do?
 
 At its core, this package links together [segmented](https://en.wikipedia.org/wiki/Image_segmentation) microscopy video of microbots.
