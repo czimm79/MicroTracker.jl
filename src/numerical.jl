@@ -100,3 +100,22 @@ function estimate_omega(x::AbstractVector, y::AbstractVector)
 
 	return particle_rotation_rate
 end
+
+"""
+	ellipse(major, minor, pos, angle)
+
+Get points `x, y` for the ellipse with `major` and `minor` axes, `pos` vector, and `angle` in radians.
+"""
+function ellipse(major, minor, pos, angle)
+	rot(α) = [cos(α) -sin(α) ; sin(α) cos(α)]
+	a = major / 2
+	b = minor / 2
+	t = 0:0.1:2π*1.01
+	
+	xpre = a * cos.(t)
+	ypre = b * sin.(t)
+
+	rotated_matrix = rot(angle) * hcat(xpre, ypre)' .+ pos
+
+	return rotated_matrix[1, :], rotated_matrix[2, :]
+end

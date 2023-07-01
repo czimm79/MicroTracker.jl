@@ -28,7 +28,7 @@ Now, type `]` at the empty `julia>` prompt, before typing anything else. This en
 (@v1.9) pkg> activate .
 Activating new project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
 
-(tutorial) pkg> add MicroTracker Pluto CairoMakie GLMakie
+(tutorial) pkg> add MicroTracker Pluto
 ...output snipped
 ```
 

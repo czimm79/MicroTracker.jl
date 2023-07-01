@@ -1,4 +1,4 @@
-@testset "numerical functions" begin
+#@testset "numerical functions" begin
     xs = 1.0:201 |> collect
     ys = 2:500 |> collect
 
@@ -8,7 +8,16 @@
     v_actual = 3.0  # constant velocity
     p = v_actual .* t .+ 50.0
     @test all(MicroTracker.numerical_derivative(p) .== v_actual)
-end
+
+    major = 2
+    minor = 3
+    pos = [0, 0]
+    angle = 0
+    ellipse_xs, ellipse_ys = MicroTracker.ellipse(major, minor, pos, angle)
+    @test maximum(ellipse_xs) == major/2
+    @test isapprox(maximum(ellipse_ys), minor/2, rtol=0.01)
+#end
+
 
 @testset "FFT + line fitting" begin
     error_tolerance = 0.055
