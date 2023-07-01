@@ -17,10 +17,10 @@ function __init__()
     copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
-using CSV, DataFrames, DataFramesMeta, Dates  # data manipulation
+using CSV, DataFrames, DataFramesMeta  # data manipulation
 using Optim, Statistics, FFTW  # FFT
 using Reexport
-using CairoMakie
+using Images
 
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 

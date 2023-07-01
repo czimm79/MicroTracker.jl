@@ -11,3 +11,7 @@ Segmentation can be performed with a variety of methods, from simple (thresholdi
 
 ## Setup
 * Make sure you're in the project folder, etc. docs for this section needed.
+
+
+## Caveats
+- On Mac, when running the ImageJ macro more than once, it will error with "Permission denied", as it will not overwrite previously saved `.csv` files with the same name.

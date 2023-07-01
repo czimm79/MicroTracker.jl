@@ -124,16 +124,11 @@ end
     particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
 
 Process particle data into linked trajectory data while calculating instantaneous velocity and other salient data.
-Returns a `DataFrame` that can then be saved to `linked_data` using [`save_linked_data_with_timestamp`](@ref).
+Returns a `DataFrame` that can then be saved to `linked_data` using [`save_linked_data_with_metadata`](@ref).
 
 A particle data csv corresponding to `video_name` must be present in the `particle_data` folder.
 The `translation_dict`` is a dictionary detailing the information contained in the filename. For full explanation, 
 see the MicroTracker docs (ref needed).
-
-```jldoctest
-julia> 1 + 1
-2
-```
 """
 function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
     particle_data = load_particle_data(video_name)
@@ -175,17 +170,6 @@ function batch_particle_data_to_linked_data(translation_dict::Dict, linking_sett
     end
 
     return output
-end
-
-"""
-    save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
-
-Save final linked data to `linked_data` folder with a timestamped filename.
-"""
-function save_linked_data_with_timestamp(linked_data::AbstractDataFrame)
-    datetime = Dates.format(Dates.now(), "yyyy-mm-dd_THH-MM")
-	CSV.write("linked_data/$(datetime).csv", linked_data)
-    @info "Saved to linked_data/$(datetime).csv"
 end
 
 """
