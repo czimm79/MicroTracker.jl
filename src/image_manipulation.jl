@@ -110,7 +110,7 @@ function loadframe(vidname::AbstractString, framenumber::Integer)
 	file_extension = getfileextension(sampleimagename)
 	framenumberfinal = lpad(framenumber, digit_length, "0")
 	
-	frame = CairoMakie.load("original_video/$vidname/$imagenameprefix$framenumberfinal.$file_extension")
+	frame = load("original_video/$vidname/$imagenameprefix$framenumberfinal.$file_extension")
 end
 
 """

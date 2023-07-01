@@ -6,7 +6,7 @@ On this page, you will
 4. Create an organized folder structure for your project using MicroTracker.
 
 ## Download and install Julia
-Download and install Julia from their website [https://julialang.org/downloads/]. Be sure to check the "Add Julia to PATH" checkmark. This allows you to call Julia anywhere from the command line by typing `julia` !
+Download and install Julia from their website [https://julialang.org/downloads]. For full instructions for every operating system, see [https://julialang.org/downloads/platform/]. Be sure to add Julia to PATH, as this allows you to call Julia anywhere from the command line by typing `julia`. On Windows, this is by just checking the box, but on Mac, you'll have to run the commands in your terminal from the second Julia website link above.
 
 !!! note
     On Windows, I recommend installing Julia from the [Windows Store](https://apps.microsoft.com/store/detail/julia/9NJNWW8PVKMN?hl=en-us&gl=us). This automatically adds Julia to your PATH and also installs the `juliaup` command line tool to seamlessly update Julia when new versions are released. Both options work though!
@@ -14,7 +14,6 @@ Download and install Julia from their website [https://julialang.org/downloads/]
 ### Test if it works
 Open a terminal window and type `julia`. You should be able to run simple commands. For more basic information on Julia, see their great [docs].(https://docs.julialang.org/en/v1/manual/getting-started/)
 ![image showing julia basics](assets/opening%20julia.png)
-
 
 ## Creating an environment for your project
 Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.

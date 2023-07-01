@@ -14,8 +14,8 @@ function create_project_here(;include_examples=false)
     assets_path = get_assets_path()
 
     # copy over notebook
-    notebook_path = joinpath(assets_path, "microtracker+pluto.jl")
-    cp(notebook_path, joinpath(pwd(), "microtracker+pluto.jl"))
+    notebook_path = joinpath(assets_path, "notebook.jl")
+    cp(notebook_path, joinpath(pwd(), "notebook.jl"))
 
     if include_examples
         # copy over particle data
@@ -45,13 +45,22 @@ function create_project_here(;include_examples=false)
     @info "New MicroTracker project created in $(pwd())"
 end
 
+"""
+    create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::Float64)
+
+Create a macro script for batch segmenting videos in `original_video` with Fiji.
+
+Required keyword arguments:
+- `MPP` = microns per pixel ::Float64
+- `minimum_segmentation_diameter` = only particles above this diameter in microns will be segmented ::Float64
+"""
 function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::Float64)
     filename = "imagej_macro.ijm"
     io = open(filename, "w")
 
     # write some text to the file
     text = """
-    microtracker_directory = $(pwd())
+    microtracker_directory = "$(pwd())"
 
     input_folder = microtracker_directory + "/original_video"
     output_folder = microtracker_directory + "/particle_data"
@@ -68,22 +77,20 @@ function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::
 
     THRESHOLD = 110  // ONLY used if constant threshold binary is enabled. Commented out by default.
 
-    function batch(input_folder, output_folder, outline_folder) {
+    function batch(input_folder, output_folder) {
         // Looks inside input_folder and for each image stack, uses the process function on it.
         list = getFileList(input_folder);
         //print(list.length);
         for (i = 0; i < list.length; i++){
             name = substring(list[i], 0, lengthOf(list[i]) - 1);  // removes trailing bracket
-            process(name, input_folder, output_folder, outline_folder);
+            process(name, input_folder, output_folder);
     }
     }
 
-    function process(stack_name, input_folder, output_folder, outline_folder) {
+    function process(stack_name, input_folder, output_folder) {
         // Do image processing on stack_name and output results in a csv to output_folder.
         stack_path = input_folder + "/" + stack_name + "/";
         output_path = output_folder + "/" + stack_name + ".csv";
-        outline_path = outline_folder + "/" + stack_name + "/a.tif";
-        outline_directory = outline_folder + "/" + stack_name;
         
         // Process
         print(stack_name);
@@ -101,24 +108,14 @@ function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::
         
         run("Set Measurements...", "area centroid center circularity fit display redirect=None decimal=3");
         run("Analyze Particles...", "size=min_size-Infinity show=Outlines display clear stack");
-    // show=Outlines
 
         run("Close");
         run("Close");
-        
-        // Save outlines
-    //	File.makeDirectory(outline_directory);
-    //	run("Image Sequence... ", "format=TIFF name=a save=outline_path");
-    //	close();
-
-        
         saveAs("Results", output_path);
-
-
     }
 
 
-    batch(input_folder, output_folder, outline_folder)
+    batch(input_folder, output_folder)
     """
     print(io, text)
 
