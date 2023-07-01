@@ -20,9 +20,9 @@ end
 using CSV, DataFrames, DataFramesMeta  # data manipulation
 using Optim, Statistics, FFTW  # FFT
 using Reexport
-using Images
-
+using ImageIO, FileIO  # image loading, can also use Images but this is more lightweight
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
+@reexport using StatsPlots  # also reexports Plots
 
 include("numerical.jl")
 export fit_line, fftclean
@@ -45,4 +45,6 @@ export find_trajectory_bounds, clip_trajectory_edges
 include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories
 
+include("plotting.jl")
+export trajectory_analyzer, trajectory_analyzer_scrubbable, plotannotatedframe, plotannotatedframe_single
 end
