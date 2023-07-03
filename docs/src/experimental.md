@@ -4,7 +4,7 @@ On this page, you'll learn how best to set up your experiment and microscopy for
 ## Filenames keep track of variables
 A study can contain multiple independent variables (temperature, field strength, microbot design, viscosity, geometry). MicroTracker can handle as many variables as you'd like, provided there is a separate video at each experimental condition.
 
-For example, lets say we're studying temperature and field strength. A convenient way to keep track of experimental conditions is to include it in the filename, and MicroTracker is designed to parse and collect information from each video filename. If I had temperature and field strength to record, my completed set of videos would look like this:
+For example, lets say we're studying temperature and field strength. A convenient way to keep track of experimental conditions is to include it in the filename, and MicroTracker is designed to parse and collect information from each video filename. If I had temperature and field strength to record, my completed set of videos would have these filenames:
 
 ```
 "32_4_1"
@@ -19,8 +19,10 @@ You can set your own format, but notice two requirements for your file naming fo
 1. Underscores (`_`) are used to separate conditions.
 2. Instead of periods, the letter `p` is used. `6.2` turns into `6p2`.
 
+After naming your videos appropriately, you can convey this information to MicroTracker using the requisite [Translation Dictionary](@ref) in the [Linking](@ref) step.
+
 ## Contrast is important
 For successful tracking, the microbots must have good contrast with their background, especially for simple thresholding techniques like that detailed in [Segmentation](@ref). If your experiments do not easily lend themselves to a contrasting and uniform background, look into advanced methods of segmentation like [ilastik](https://www.ilastik.org/) or applying additional filters with ImageJ.
 
 ## Clean up before you analyze
-Use ImageJ or any other video editor to clip out parts of the video you can't use, like when there are no microbots on the screen or when you move the microscope.
+Use ImageJ or any other video editor to clip out parts of the video you can't use. This could be when there are no microbots on the screen, any vibrations, or when you move the microscope.
