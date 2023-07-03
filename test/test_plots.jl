@@ -13,6 +13,13 @@ end
     @test_throws ErrorException cd(()->plotannotatedframe(linked_data, "doesntexist", 30, showimage=true), get_assets_path())
     @isplot cd(()->plotannotatedframe_single(linked_data, "5_13p5_61p35-3", 30, showimage=true), get_assets_path())
     
-    @isplot cd(()->trajectory_analyzer_scrubbable(linked_data, collapsed_data, all_particle_names[3], 150), get_assets_path())
     @isplot cd(()->trajectory_analyzer(linked_data, collapsed_data, all_particle_names[3]), get_assets_path())
+    @isplot cd(()->trajectory_analyzer(linked_data, collapsed_data, all_particle_names[3], 500), get_assets_path())
+    @isplot cd(()->trajectory_analyzer(linked_data, collapsed_data, all_particle_names[3], 120), get_assets_path())
+
+    # animations
+    cd(()->animate_trajectory_analyzer(linked_data, collapsed_data, all_particle_names[3], "test_animation.mp4", 1:2), get_assets_path())
+    @test cd(()->isfile("test_animation.mp4"), get_assets_path())
+    cd(()->rm("test_animation.mp4"), get_assets_path())
+
 end

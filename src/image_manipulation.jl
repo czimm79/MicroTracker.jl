@@ -97,6 +97,8 @@ Return an image corresponding to the `framenumber` frame in the video `vidname`.
 
 It looks at the way the tifs are automatically named and matches the pattern.
 **Does not necessarily** match the real frame number in the data, especially if there is no particle in the first frame.
+
+Normally, images from ImageJ index at 0, while Julia indexes at one. Therefore, this function will return the image named with `framenumber-1`.
 """
 function loadframe(vidname::AbstractString, framenumber::Integer)
     if !isdir("original_video/$vidname")
@@ -108,7 +110,7 @@ function loadframe(vidname::AbstractString, framenumber::Integer)
 	imagenameprefix = getprefixfromimagename(sampleimagename)
 	digit_length = getimagenamedigitlength(sampleimagename)
 	file_extension = getfileextension(sampleimagename)
-	framenumberfinal = lpad(framenumber, digit_length, "0")
+	framenumberfinal = lpad(framenumber - 1, digit_length, "0")
 	
 	frame = load("original_video/$vidname/$imagenameprefix$framenumberfinal.$file_extension")
 end

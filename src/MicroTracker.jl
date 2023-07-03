@@ -46,5 +46,5 @@ include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories
 
 include("plotting.jl")
-export trajectory_analyzer, trajectory_analyzer_scrubbable, plotannotatedframe, plotannotatedframe_single
+export trajectory_analyzer,  plotannotatedframe, plotannotatedframe_single, animate_trajectory_analyzer
 end

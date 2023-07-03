@@ -5,9 +5,11 @@
 [![Build Status](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![Coverage](https://codecov.io/gh/czimm79/MicroTracker.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/czimm79/MicroTracker.jl)
 
-MicroTracker.jl is a [Julia](https://julialang.org/) package that tracks and analyzes moving microbots in microscopy video. This package includes critical metrics including size, velocity, and rotation/actuation rate for study of arbitrary microbot designs. 
+MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package that tracks and analyzes moving [microbots](https://www.nature.com/articles/s41467-020-19322-7) in microscopy video. MicroTracker allows tracking of critical microbot metrics including size, velocity, and rotation rate, enabling high-throughput analysis of experimental data.
 
-For more information on microbots and this package, please see the short paper (link needed). To get started using or contributing, see the [docs](https://czimm79.github.io/MicroTracker.jl/dev/). 
+![animation preview](assets/test_animation_full.mp4)
 
-This package is designed for users with limited coding or Julia experience. Follow the quickstart guide to see example results and how MicroTracker could help in your research.
+This package is designed for users with limited coding or Julia experience. Follow the quickstart(ref) guide in the documentation to get started with some example data.
+
+For more information on microbots and this package, please see the short paper(link needed). To get started using or contributing, see the [docs](https://czimm79.github.io/MicroTracker.jl/dev/). 
 
