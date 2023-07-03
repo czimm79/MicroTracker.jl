@@ -7,7 +7,7 @@
 
 MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package that tracks and analyzes moving [microbots](https://www.nature.com/articles/s41467-020-19322-7) in microscopy video. MicroTracker allows tracking of critical microbot metrics including size, velocity, and rotation rate, enabling high-throughput analysis of experimental data.
 
-![animation example](https://github.com/czimm79/MicroTracker.jl/blob/master/assets/test_animation_full.mp4?raw=true)
+![animation example](https://github.com/czimm79/MicroTracker.jl/blob/master/assets/test_animation_full.mp4)
 
 This package is designed for users with limited coding or Julia experience. Follow the quickstart(ref) guide in the documentation to get started with some example data.
 
