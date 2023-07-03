@@ -11,12 +11,15 @@ https://github.com/czimm79/MicroTracker.jl/assets/49537407/94a938f3-3453-4592-bf
 
 This package is designed for users with limited coding or Julia experience. Follow the quickstart(ref) guide in the documentation to get started with some example data.
 
-For more information on microbots and this package, please see the short paper(link needed). To get started using or contributing, see the docs by clicking the [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/) badge. 
+For more information on microbots and this package, please see the short [paper](https://github.com/czimm79/MicroTracker.jl/blob/master/paper/paper.md). To get started using or contributing, see the docs by clicking the [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/) badge. 
 
 ## Extra information
-Components of MicroTracker have been used in various scholarly works[^1][^2][^3][^4]. This package open sources, combines, and tests the tools written for microbot tracking as part of Coy Zimmermann's PhD thesis work 2018-2023 on magnetically propelled microwheels. This work was performed in the [Marr Group](https://chemeng.mines.edu/project/marr-david/) at the Colorado School of Mines and with collaboration of the [Neeves Lab](https://neeveslab.com/) at the University of Colorado Denver, Anschutz Medical Campus.
+Various components of MicroTracker have been used in scholarly works[^1][^2][^3][^4]. This package open sources, combines, and tests the tools written for microbot tracking as part of Coy Zimmermann's PhD thesis work 2018-2023 on magnetically propelled microwheels. This work was performed in the [Marr Group](https://chemeng.mines.edu/project/marr-david/) at the Colorado School of Mines and with collaboration of the [Neeves Lab](https://neeveslab.com/) at the University of Colorado Denver, Anschutz Medical Campus. MicroTracker uses and builds on years of work from colloidal science researchers[^5][^6].
 
-[^1]: Wolvington, E., Yeager, L., Gao, Y., Zimmermann, C. J. & Marr, D. W. M. Paddlebots: Translation of Rotating Colloidal Assemblies near an Air/Water Interface. Langmuir 39, 7846–7851 (2023).
-[^2]: Osmond, M. J. et al. Magnetically Powered Chitosan Milliwheels for Rapid Translation, Barrier Function Rescue, and Delivery of Therapeutic Proteins to the Inflamed Gut Epithelium. ACS Omega 8, 11614–11622 (2023)
-[^3]: Zimmermann, C. J., Herson, P. S., Neeves, K. B. & Marr, D. W. M. Multimodal microwheel swarms for targeting in three-dimensional networks. Sci. Rep. 12, 5078 (2022).
-[^4]: Zimmermann, C. J. et al. Delivery and actuation of aerosolized microbots. Nano Sel. nano.202100353 (2022) doi:10.1002/nano.202100353.
+[^1]: E. Wolvington, L. Yeager, Y. Gao, C. J. Zimmermann, and D. W. M. Marr, “Paddlebots: Translation of Rotating Colloidal Assemblies near an Air/Water Interface,” Langmuir, vol. 39, no. 22, pp. 7846–7851, Jun. 2023, doi: 10.1021/acs.langmuir.3c00701.
+[^2]: M. J. Osmond, E. Korthals, C. J. Zimmermann, E. J. Roth, D. W. M. Marr, and K. B. Neeves, “Magnetically Powered Chitosan Milliwheels for Rapid Translation, Barrier Function Rescue, and Delivery of Therapeutic Proteins to the Inflamed Gut Epithelium,” ACS Omega, vol. 8, no. 12, pp. 11614–11622, Mar. 2023, doi: 10.1021/acsomega.3c00886.
+[^3]: C. J. Zimmermann, P. S. Herson, K. B. Neeves, and D. W. M. Marr, “Multimodal microwheel swarms for targeting in three-dimensional networks,” Sci Rep, vol. 12, no. 1, p. 5078, Dec. 2022, doi: 10.1038/s41598-022-09177-x.
+[^4]: C. J. Zimmermann, T. Schraeder, B. Reynolds, E. M. DeBoer, K. B. Neeves, and D. W. M. Marr, “Delivery and actuation of aerosolized microbots,” Nano Select, p. nano.202100353, Mar. 2022, doi: 10.1002/nano.202100353.
+[^5]: J. C. Crocker and D. G. Grier, “Methods of Digital Video Microscopy for Colloidal Studies,” Journal of Colloid and Interface Science, vol. 179, no. 1, pp. 298–310, Apr. 1996, doi: 10.1006/jcis.1996.0217.
+[^6]: D. B. Allan, T. Caswell, N. C. Keim, C. M. van der Wel, and R. W. Verweij, “soft-matter/trackpy: v0.6.1.” Zenodo, Feb. 2023. doi: 10.5281/zenodo.7670439.
+
