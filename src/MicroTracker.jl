@@ -25,7 +25,7 @@ using ImageIO, FileIO  # image loading, can also use Images but this is more lig
 @reexport using StatsPlots  # also reexports Plots
 
 include("numerical.jl")
-export fit_line, fftclean
+export fit_line, fftclean, estimate_omega
 
 include("developer_utilities.jl")
 export get_assets_path
