@@ -24,5 +24,8 @@ After naming your videos appropriately, you can convey this information to Micro
 ## Contrast is important
 For successful tracking, the microbots must have good contrast with their background, especially for simple thresholding techniques like that detailed in [Segmentation](@ref). If your experiments do not easily lend themselves to a contrasting and uniform background, look into advanced methods of segmentation like [ilastik](https://www.ilastik.org/) or applying additional filters with ImageJ.
 
+!!! tip
+    When using fluorescent microscopy, the microbots will be "bright" while the background is dark. This can be accounted for by choosing a manual threshold for your microbots in the imagej macro in [Segmentation](@ref).
+
 ## Clean up before you analyze
 Use ImageJ or any other video editor to clip out parts of the video you can't use. This could be when there are no microbots on the screen, any vibrations, or when you move the microscope.

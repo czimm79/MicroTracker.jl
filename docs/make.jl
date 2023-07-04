@@ -17,10 +17,12 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Manual" => ["quickstart.md",
-                     "experimental.md", 
-                     "settingupuser.md", 
+                     "settingupuser.md",
+                     "pluto.md",
+                     "linking.md",
+                     "collapsing.md",
+                     "experimental.md",  
                      "segmenting.md", 
-                     "linking.md"
                      ],
         "Contributing" => ["settingupdev.md"],
         "API" => "api.md"
