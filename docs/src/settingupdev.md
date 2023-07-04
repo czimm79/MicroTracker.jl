@@ -30,6 +30,8 @@ The dependent packages for MicroTracker normally automatically install behind th
 !!! note
     When opening the package, sometimes VSCode will automatically recognize that the MicroTracker environment should be activated and prompt you. If this is the case, instead of `(v1.8)`, you'll see `MicroTracker`, and you can skip step 2.
 
+## Creating a pull request
+GitHub Desktop makes proposing changes to a repository easy without learning git on the command line. The general workflow is detailed [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request?tool=desktop).
 ## Common hiccups
 1. Sometimes when changing the dependencies of MicroTracker, the CI for the docs will fail. I fixed this by activating the docs env using `activate ./docs` and then `resolve`.
 
