@@ -15,7 +15,9 @@ authors:
       affiliation: 1
 affiliations:
     - name: Department of Chemical and Biological Engineering, Colorado School of Mines, Golden, CO, USA
+      index: 1
     - name: Departments of Bioengineering and Pediatrics, University of Colorado Denver | Anschutz Medical Campus, Aurora, CO, USA
+      index: 2
 bibliography: paper.bib
 ---
 
@@ -31,7 +33,7 @@ This is performed by linking individual segmented particle data from each video 
 
 MicroTracker.jl also couples with Pluto.jl[@plas_fonspplutojl_2022] to feature an interactive microbot visualizer that displays the velocity, size, and frequency data along with the annotated trajectory [Fig1]. Sliders and dropdown menus enable the user to scan through each individual video, microbot, and time point. This level of interactivity is critical for analyzing how a given microbot design moves under given experimental conditions. Additionally, with thoughtful naming of microscopy video files with their experimental conditions, MicroTracker.jl can automatically generate publication-ready plots with the help of Julia plotting libraries[@tom_breloff_2023_8028030] that summarize entire experimental sets. Together, these tools allow researchers to make insights at both the individual microbot and condition-wide levels.
 
-Tracking of particles in microscopy video has previously been performed either manually through image processing software[@schindelin_fiji_2012] or in an automated fashion with particle tracking software such as TrackMate[@tinevez_trackmate_2017] or Trackpy[@allan_soft-mattertrackpy_2023]. These software were primarily designed for tracking spherical uniform particles and use methods such as the Laplacian of Gaussian that determine the centroid of a Gaussian feature of a certain size. However, these detectors can be ineffective with microbots as they can vary widely in size and shape. MicroTracker.jl allows for size, shape, and rotation rate tracking of microbots which regularly enter and leave the video frame and is an open-source package catered specifically for microrobotic research.
+Tracking of particles in microscopy video has previously been performed either manually through image processing software[@schindelin_fiji_2012] or in an automated fashion with particle tracking software such as TrackMate[@tinevez_trackmate_2017] or TrackPy[@allan_soft-mattertrackpy_2023]. These software were primarily designed for tracking spherical uniform particles and use methods such as the Laplacian of Gaussian that determine the centroid of a Gaussian feature of a certain size. However, these detectors can be ineffective with microbots as they can vary widely in size and shape. MicroTracker.jl allows for size, shape, and rotation rate tracking of microbots which regularly enter and leave the video frame and is an open-source package catered specifically for microrobotic research.
 
 A Pluto.jl[@plas_fonspplutojl_2022] notebook is included with this package to provide a simple template and tutorial for users with limited coding experience. Additionally, a detailed tutorial on how to prepare microscopy video with ImageJ for use with MicroTracker.jl is included in the documentation along with a sample ImageJ macro for easy batch processing.
 Multiple publications that make use of tools in MicroTracker.jl have been published or are in preparation but their scientific contribution is unique and independent of this package. These include studies of microbots for use in the vasculature[@zimmermann_multimodal_2022], lungs[@zimmermann_delivery_2022], gastrointestinal system[@osmond_magnetically_2023], and at the air water interface[@wolvington_paddlebots_2023].
