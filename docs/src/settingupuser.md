@@ -62,10 +62,10 @@ tutorial/
 ├── linked_data/
 │   └── (B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0,   
 │        STUBS_SECONDS = 0.5).csv
-└── notebook.jl
+└── microtracker_notebook.jl
 ```
 
 - `original_video` The raw microscopy video goes here, in the Image Sequence format (folders of `.tif` images). Many microscopes output automatically in this format, or [Fiji](https://imagej.net/software/fiji/) can be used to save almost any format into the Image Sequence format.
 - `particle_data` This is where a `.csv` file for each video, with the same filename, will be located. These csv files are the result of segmentation, which is explained thoroughly in the next page of the manual!
 - `linked_data` This is the primary output of MicroTracker. This is where `.csv` files are output that contains data for *every* microbot across *all* videos. This ensures that all analysis is carried out with the same parameters.
-- `notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
+- `microtracker_notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
