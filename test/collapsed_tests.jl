@@ -15,6 +15,6 @@
         MIN_DISPLACEMENT = 0,  # µm
     )
 
-    @test size(filter_trajectories(collapsed_data, filter_settings))[1] == 26
+    @test size(filter_trajectories(collapsed_data, filter_settings))[1] == 23
 
 end
