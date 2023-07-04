@@ -1,11 +1,21 @@
 """
-    create_project_here(;include_examples=false)
+    create_project_here()
+    create_project_here(include_examples=false)
 
 Create the folder structure for a MicroTracker project *in the current working directory*.
 
-If `include_examples` is true, then example particle data and videos will be included.
+If `include_examples` is false, then example particle data and videos will not be included.
+
+# Example
+```julia-repl
+julia> pwd()
+"~/tutorial"
+
+julia> create_project_here()
+[ Info: New MicroTracker project created in ~/tutorial
+```
 """
-function create_project_here(;include_examples=false)
+function create_project_here(;include_examples=true)
     # make the general structure
     mkdir("particle_data")
     mkdir("linked_data")
@@ -51,8 +61,17 @@ end
 Create a macro script for batch segmenting videos in `original_video` with Fiji.
 
 Required keyword arguments:
-- `MPP` = microns per pixel ::Float64
-- `minimum_segmentation_diameter` = only particles above this diameter in microns will be segmented ::Float64
+- `MPP` : microns per pixel, `Float64` (unique to your microscope setup!)
+- `minimum_segmentation_diameter` : only particles above this diameter*1.5 in microns will be segmented, `Float64`. See the following reference for why the 1.5:
+
+J. Baumgartl, J. L. Arauz-Lara, and C. Bechinger, “Like-charge attraction in confinement: myth or truth?,”  
+Soft Matter, vol. 2, no. 8, p. 631, 2006, doi: 10.1039/b603052a.
+
+# Example
+```julia-repl
+julia> create_imagej_macro_here(MPP=0.605, minimum_segmentation_diameter=4.5)
+[ Info: ImageJ macro created at ~/tutorial/imagej_macro.ijm. See MicroTracker segmentation docs for instructions on how to use it. 
+```
 """
 function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::Float64)
     filename = "imagej_macro.ijm"
@@ -121,4 +140,6 @@ function create_imagej_macro_here(;MPP::Float64, minimum_segmentation_diameter::
 
     # close the file
     close(io)
+
+    @info "ImageJ macro created at $(pwd())/$filename. See MicroTracker segmentation docs for instructions on how to use it."
 end

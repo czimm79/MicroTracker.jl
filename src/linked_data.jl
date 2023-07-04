@@ -146,15 +146,12 @@ end
 Process all `.csv` files in `particle_data` into linked trajectory data and concatenate the results.
 
 Returns a `DataFrame` containing all linked data for the entire experimental array. This is also saved to `linked_data` 
-using [`save_linked_data_with_metadata`](@ref) for further analysis.
+using [`save_linked_data_with_metadata`](@ref) for record keeping and further analysis.
 
-The `translation_dict`` is a dictionary detailing the information contained in the filename. For full explanation, 
-see the MicroTracker docs (ref needed).
-
-```jldoctest
-julia> 1 + 1
-2
-```
+The `translation_dict`` is a dictionary detailing the information contained in the filename. `linking_settings` contains the input
+parameters for the linking algorithm and microscope information. Only one of these arguments may contain the `FPS`.
+    
+For full explanation, see the MicroTracker [Linking](@ref) docs.
 """
 function batch_particle_data_to_linked_data(translation_dict::Dict, linking_settings::NamedTuple; save_to_csv=true)
     all_names = get_names_in_particle_data()
@@ -173,12 +170,22 @@ function batch_particle_data_to_linked_data(translation_dict::Dict, linking_sett
 end
 
 """
-save linked data with metadata
+    save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
+
+Save linked data with the `translation_dict` and `linking_settings` in the filename. Will overwrite existing file.
 """
 function save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
     dictstring = MicroTracker.translation_dict_to_string(translation_dict)
     filename = "($dictstring) - $(string(linking_settings))"
-    CSV.write("linked_data/$filename.csv", linked_data)
+    path = "linked_data/$filename.csv"
+
+    if isfile(path)
+        rm(path)
+        CSV.write(path, linked_data)
+    else
+        CSV.write(path, linked_data)
+    end
+    @info "Linked data saved to linked_data/$filename.csv"
 end
 
 # Trajectory clipping functions

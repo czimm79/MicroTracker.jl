@@ -9,9 +9,12 @@ MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package th
 
 https://github.com/czimm79/MicroTracker.jl/assets/49537407/94a938f3-3453-4592-bf68-36b9e59b7f2e
 
-This package is designed for users with limited coding or Julia experience. Follow the quickstart(ref) guide in the documentation to get started with some example data.
+For more information on microbots and this package, please see the short [paper](https://github.com/czimm79/MicroTracker.jl/blob/master/paper/paper.md).
 
-For more information on microbots and this package, please see the short [paper](https://github.com/czimm79/MicroTracker.jl/blob/master/paper/paper.md). To get started using or contributing, see the docs by clicking the [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/) badge. 
+ To get started, view the docs by clicking the [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/) badge and click **Quick Start** on the left side. This package is designed for users with limited coding or Julia experience. If there is anything that is difficult to understand, please raise an issue or start a pull request.
+
+## Collaboration/Contributing
+MicroTracker is built for collaboration and use across the microbot research field. To get started contributing and improving the package, see the [setup guide](https://czimm79.github.io/MicroTracker.jl/dev/settingupdev/).
 
 ## Extra information
 Various components of MicroTracker have been used in scholarly works[^1][^2][^3][^4]. This package open sources, combines, and tests the tools written for microbot tracking as part of Coy Zimmermann's PhD thesis work 2018-2023 on magnetically propelled microwheels. This work was performed in the [Marr Group](https://chemeng.mines.edu/project/marr-david/) at the Colorado School of Mines and with collaboration of the [Neeves Lab](https://neeveslab.com/) at the University of Colorado Denver, Anschutz Medical Campus. MicroTracker uses and builds on years of work from colloidal science researchers[^5][^6].
