@@ -49,23 +49,26 @@ FPSstring_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS
     @test MicroTracker.find_relevant_FPS(select(particle_data_with_added_cols, Not(:FPS)), (;FPS=30.0)) == 30.0 # FPS is constant in tuple
     @test MicroTracker.find_relevant_FPS(particle_data_with_added_cols, (;BLAH="meaningless")) == 61.35 # FPS is in the dataframe from the filename
 
-    # add resolution
-    cd(()->MicroTracker.add_resolution_column!(particle_data_with_added_cols), get_assets_path())
-    @test particle_data_with_added_cols.video_resolution[1] == (753, 715)
-
     # Linking with trackpy
     fresh_linked_data = MicroTracker.link(particle_data_with_added_cols, test_linking_settings)
     @test fresh_linked_data.particle |> unique |> length == 21  # 21 particles in the test data with stubs of 0.5 seconds
+
+    # add resolution
+    cd(()->MicroTracker.add_resolution_column!(fresh_linked_data), get_assets_path())
+    @test fresh_linked_data.video_resolution[1] == (753, 715)
 
     # Add useful columns like dx, dy, dp (velocity), and size measurements in microns
     linked_data_with_newcols = MicroTracker.add_useful_columns(fresh_linked_data, test_linking_settings)
     @test "dx" in names(linked_data_with_newcols)
 
+    # test clipping trajectories on real data
+    linked_data_with_newcols_clipped = cd(()->MicroTracker.clip_trajectory_edges(linked_data_with_newcols, test_linking_settings), get_assets_path())
+
     # test the do it all function
     final_linked_data = cd( () -> particle_data_to_linked_data("5_13p5_61p35", test_translation_dict, test_linking_settings),
         get_assets_path())
 
-    @test final_linked_data == linked_data_with_newcols
+    @test final_linked_data == linked_data_with_newcols_clipped
 
     # test that the batch process function works
     @test_throws ErrorException cd(()->batch_particle_data_to_linked_data(test_translation_dict, bad_linking_settings; save_to_csv=false),
@@ -73,7 +76,7 @@ FPSstring_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS
 
     batch_final_linked_data = cd(()->batch_particle_data_to_linked_data(test_translation_dict, test_linking_settings; save_to_csv=false),
         get_assets_path())
-    @test size(batch_final_linked_data) == (5147, 31)
+    @test size(batch_final_linked_data) == (4337, 31)
 
 end
 

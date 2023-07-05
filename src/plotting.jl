@@ -88,10 +88,14 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
         framenumber = df.frame[end]
     end
 
+    # find the time that corresponds to the framenumber
+    idx = findfirst(df.frame .== framenumber)
+    t = df[idx, :time]
+
     # Instantaneous velocity plot
     p1 = plot(df.time, df.dp_um, xlabel="Time (s)", ylabel="Speed (µm/s)")
     hline!([V̄], ls=:dot, lw=2, color=:black)
-    vline!([df[framenumber, :time]], color=:grey, lw=1)
+    vline!([t], color=:grey, lw=1)
     annotate!(upperright(p1)..., text("V_avg = $(round(V̄, digits=2)) μm/s", 7, :right))
 
     # Size
@@ -99,7 +103,7 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
     if size_variable == "Major_um"
         ylabel!("Major axis (µm)")
     end
-    vline!([df[framenumber, :time]], color=:grey, lw=1)
+    vline!([t], color=:grey, lw=1)
     annotate!(upperright(p2)..., text("R = $(round(R, digits=1)) μm", 7, :right))
 
     # fft

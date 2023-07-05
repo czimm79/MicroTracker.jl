@@ -133,11 +133,12 @@ see the MicroTracker docs (ref needed).
 function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
     particle_data = load_particle_data(video_name)
     particle_data_with_exp_info = add_info_columns_from_filename(particle_data, translation_dict)
-    MicroTracker.add_resolution_column!(particle_data_with_exp_info) # add resolution column inplace
     linked_data = link(particle_data_with_exp_info, linking_settings)
+    MicroTracker.add_resolution_column!(linked_data) # add resolution column inplace
     linked_data_with_useful_columns = add_useful_columns(linked_data, linking_settings)
+    clipped_linked_data = clip_trajectory_edges(linked_data_with_useful_columns, linking_settings)
 
-    return linked_data_with_useful_columns
+    return clipped_linked_data
 end
 
 """
@@ -148,7 +149,7 @@ Process all `.csv` files in `particle_data` into linked trajectory data and conc
 Returns a `DataFrame` containing all linked data for the entire experimental array. This is also saved to `linked_data` 
 using [`save_linked_data_with_metadata`](@ref) for record keeping and further analysis.
 
-The `translation_dict`` is a dictionary detailing the information contained in the filename. `linking_settings` contains the input
+The `translation_dict` is a dictionary detailing the information contained in the filename. `linking_settings` contains the input
 parameters for the linking algorithm and microscope information. Only one of these arguments may contain the `FPS`.
     
 For full explanation, see the MicroTracker [Linking](@ref) docs.
@@ -218,7 +219,6 @@ until it finds a point that is out of bounds. This is the high and low bound of 
 function find_trajectory_bounds(df_1particle::AbstractDataFrame)
     unique(df_1particle.particle_unique) |> length > 1 && error("More than one particle in df_1particle")
     video_resolution = df_1particle.video_resolution[1]
-
 	# particle name
     particle_name = df_1particle.particle_unique[1]
 
@@ -258,7 +258,7 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame)
 end
 
 """
-	clip_trajectory_edges(linked_data::AbstractDataFrame)
+	clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
 Iterate through each trajectory and remove the tracking data where the particle is out of frame.
 
 The particle is out of frame when the center is within the radius of the particle from the edge of the video.
