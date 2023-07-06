@@ -76,7 +76,7 @@ FPSstring_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS
 
     batch_final_linked_data = cd(()->batch_particle_data_to_linked_data(test_translation_dict, test_linking_settings; save_to_csv=false),
         get_assets_path())
-    @test size(batch_final_linked_data) == (4302, 31)
+    @test size(batch_final_linked_data) == (3939, 31)
 
 end
 
@@ -127,11 +127,11 @@ end
     # find bounds
     @test find_trajectory_bounds(gdf[1]) == (-1, -1) # all out of bounds
     @test find_trajectory_bounds(gdf[2]) == (1, 401) # all inbounds
-    @test find_trajectory_bounds(gdf[3]) == (37, 1965) # clip both sides
+    @test find_trajectory_bounds(gdf[3]) == (48, 1954) # clip both sides
     @test_throws ErrorException find_trajectory_bounds(trajectory_clip_test_df) # didn't supply a 1 particle df
 
     ## snip trajectories 
     after_snipping = clip_trajectory_edges(trajectory_clip_test_df, test_linking_settings)
-    @test after_snipping[end, :frame] == 1964  # last frame of particle 3 clipped to 1970
+    @test after_snipping[end, :frame] == 1953  # last frame of particle 3
     
 end

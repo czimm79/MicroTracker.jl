@@ -24,5 +24,8 @@ In short, Julia is easy to read and write, yet retains the speed of statically c
 
 If you don't know Julia, don't worry. It is similar and as easy as Python (I'd argue easier). The best learning source is the [Computational Thinking](https://computationalthinking.mit.edu/) course from MIT.
 
-Lastly, the Pluto notebooks included with this package allow you to tinker with established workflows, minimizing the need to reinvent the wheel.
+Lastly, the Pluto notebook included with this package allow you to tinker with an established workflow, minimizing the need to reinvent the wheel.
+
+## Get Started
+Follow an abridged version of the Manual with included sample data and videos on the [Quick Start](@ref) page.
 

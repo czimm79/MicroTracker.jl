@@ -19,6 +19,8 @@ Open a terminal window and type `julia`. You should be able to run simple comman
 ## Open a Julia REPL in a directory
 Its easiest to use MicroTracker if you know how to open a terminal at a specific directory. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
 
+If for some reason you can't/don't want to add Julia to your PATH, you can use the Base Julia function `cd` to navigate to your folder. Verify your directory with the `pwd` function.
+
 ## Creating an environment for your project
 Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.
 
@@ -30,13 +32,13 @@ Now, type `]` at the empty `julia>` prompt, before typing anything else. This en
 (@v1.9) pkg> activate .
 Activating new project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
 
-(tutorial) pkg> add https://github.com/czimm79/MicroTracker.jl Pluto PlutoUI
+(tutorial) pkg> add MicroTracker Pluto PlutoUI
 ...output snipped
 ```
 
 and wait as the packages and all of their dependencies download! This adds MicroTracker, Pluto, and PlutoUI packages to your environment. If you do not plan on using the included Pluto notebook, then only MicroTracker is needed.
 
-!!! important 
+!!! tip 
     When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as this environment contains everything needed to process and visualize your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
 
 ## Create a MicroTracker project
@@ -72,3 +74,18 @@ tutorial/
 - `microtracker_notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
 
 ## Subsequent sessions
+After closing out Julia or restarting your computer, you'll have to re-open a Julia REPL in the same folder as explained in the [Open a Julia REPL in a directory](@ref) section. Don't forget to re-activate the environment you created and installed MicroTracker into. Remember, use `]` to get into [Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/) to run the `activate .` command.
+
+```julia-repl
+julia> pwd()
+"R:\\Wormhole\\OneDrive\\Research\\Papers\\JOSS_microtracker\\tutorial"
+
+(v1.9)> activate .
+Activating project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
+
+julia> using MicroTracker
+```
+
+### Alternatives
+1. If you open the Pluto notebook as described on the [Pluto](@ref) page, you do not need to activate the environment.
+2. VSCode.
