@@ -16,12 +16,13 @@ Open a terminal window and type `julia`. You should be able to run simple comman
 
 ![1 plus 1 in julia](./assets/opening julia.png)
 
+## Open a Julia REPL in a directory
+Its easiest to use MicroTracker if you know how to open a terminal at a specific directory. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
+
 ## Creating an environment for your project
 Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.
 
-To do this, just create a new empty folder. Name it descriptively, like `2023-06-21 microwheel field sweep`. For this page, I'll just create a folder named `tutorial`.
-
-Next, you need to open a terminal at this location. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
+To do this, just create a new empty folder. Name it descriptively, like `2023-06-21 microwheel field sweep`. For this page, I'll just create a folder named `tutorial`. Open a Julia REPL in this directory as described in the above section.
 
 Now, type `]` at the empty `julia>` prompt, before typing anything else. This enters you into [package mode](https://docs.julialang.org/en/v1/stdlib/Pkg/). You'll notice that now instead of `julia>`, you see the name of the current environment in blue. Now, use the following commands to create a new environment in your current folder:
 
@@ -69,3 +70,5 @@ tutorial/
 - `particle_data` This is where a `.csv` file for each video, with the same filename, will be located. These csv files are the result of segmentation, which is explained thoroughly in the next page of the manual!
 - `linked_data` This is the primary output of MicroTracker. This is where `.csv` files are output that contains data for *every* microbot across *all* videos. This ensures that all analysis is carried out with the same parameters.
 - `microtracker_notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
+
+## Subsequent sessions

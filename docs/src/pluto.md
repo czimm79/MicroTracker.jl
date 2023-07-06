@@ -1,3 +1,3 @@
 # Pluto
 
-Here's how to open the notebook file.
+To open the MicroTracker example [Pluto](https://github.com/fonsp/Pluto.jl) notebook, make sure you've 
