@@ -23,17 +23,17 @@ To do this, just create a new empty folder. Name it descriptively, like `2023-06
 
 Next, you need to open a terminal at this location. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
 
-Now, type `]` at the empty `julia>` prompt, before typing anything else. This enters you into [package mode](https://docs.julialang.org/en/v1/stdlib/Pkg/). You'll notice that now instead of `julia>`, you see the name of the current environment in blue. Now, type the following to create a new environment in your current folder:
+Now, type `]` at the empty `julia>` prompt, before typing anything else. This enters you into [package mode](https://docs.julialang.org/en/v1/stdlib/Pkg/). You'll notice that now instead of `julia>`, you see the name of the current environment in blue. Now, use the following commands to create a new environment in your current folder:
 
 ```julia-repl
 (@v1.9) pkg> activate .
 Activating new project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
 
-(tutorial) pkg> add https://github.com/czimm79/MicroTracker.jl Pluto
+(tutorial) pkg> add https://github.com/czimm79/MicroTracker.jl Pluto PlutoUI
 ...output snipped
 ```
 
-and wait as the packages and all of their dependencies download! 
+and wait as the packages and all of their dependencies download! This adds MicroTracker, Pluto, and PlutoUI packages to your environment. If you do not plan on using the included Pluto notebook, then only MicroTracker is needed.
 
 !!! important 
     When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as this environment contains everything needed to process and visualize your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
