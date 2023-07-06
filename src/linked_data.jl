@@ -222,8 +222,8 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame)
 	# particle name
     particle_name = df_1particle.particle_unique[1]
 
-    # find radius
-	radius = maximum(df_1particle.Major) / 2
+    # find radius for clipping region. Will set 30% larger than radius
+	radius = quantile(df_1particle.Major, 0.95) / 1.7
 
 	# Find midpoint, or center of trajectory idxs
 	nrows, ncols = size(df_1particle)

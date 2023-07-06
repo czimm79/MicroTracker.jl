@@ -106,7 +106,7 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
     p1 = plot(df.time, df.dp_um, xlabel="Time (s)", ylabel="Speed (µm/s)")
     hline!([V̄], ls=:dot, lw=2, color=:black)
     vline!([t], color=:grey, lw=1)
-    annotate!(upperright(p1)..., text("V_avg = $(round(V̄, digits=2)) μm/s", 7, :right))
+    annotate!(upperright(p1)..., text("Mean = $(round(V̄, digits=2)) μm/s", 7, :right))
 
     # Size
     p2 = plot(df[!,:time], df[!, size_variable], xlabel="Time (s)", ylabel=size_variable)
@@ -119,7 +119,7 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
     # fft
     xf, yf = fftclean(df.time, df[!, size_variable])
     p3 = plot(xf, yf, xlabel="Frequency (Hz)", ylabel="Amplitude")
-    annotate!(upperright(p3)..., text("Ω_est = $(round(Ω_est, digits=1)) Hz", 7, :right))
+    annotate!(upperright(p3)..., text("Estimated Ω = $(round(Ω_est, digits=1)) Hz", 7, :right))
 
     # trajectory
     p4 = plotannotatedframe_single(@subset(linked_data, :frame .<= framenumber), particle_unique, framenumber; annotationkwargs...)
