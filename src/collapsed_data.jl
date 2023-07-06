@@ -5,6 +5,9 @@ Read a linked data `.csv` file into a `DataFrame`. Assumes the `.csv` file is in
 """
 function load_linked_data(filename)
     df = CSV.read("linked_data/$filename", DataFrame)
+
+    # make sure the video_resolution column is the correct Tuple type
+    df[!, :video_resolution] .= MicroTracker.parse_to_tuple.(df[!, :video_resolution])
     return df
 end
 

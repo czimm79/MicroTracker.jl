@@ -8,6 +8,11 @@ To plot a single microbot's trajectory, use [`plotannotatedframe_single`](@ref).
 function plotannotatedframe(linked_data::AbstractDataFrame, filename::AbstractString, framenumber::Int; showimage=true, showellipse=true, plotkwargs...)
     filename ∈ linked_data.filename || error("The filename $filename was not found in linked_data")
     df = @subset(linked_data, :filename .== filename, :frame .<= framenumber)
+    video_resolution = first(df.video_resolution)
+    
+    if typeof(video_resolution) <: AbstractString   # catch if its not a tuple
+        video_resolution = parse_to_tuple(video_resolution)
+    end
 
     if showimage
         img = loadframe(filename, framenumber)
@@ -30,6 +35,11 @@ function plotannotatedframe(linked_data::AbstractDataFrame, filename::AbstractSt
             plot!(ellipse_xs, ellipse_ys, lw=1, color=:cyan, α=0.8)
         end
     end
+
+    if showimage == false  # make the limits view the entire video by default
+        plot!(;xlims=(-100, video_resolution[1]+100), yflip=true, ylims=(-100, video_resolution[2]+100))
+    end
+
     plot!(;titlefontsize=8, plotkwargs...)
     p
 end
