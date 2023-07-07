@@ -37,10 +37,11 @@ include("image_manipulation.jl")
 export loadframe, getvideoresolution
 
 include("particle_data.jl")
+export load_particle_data, add_info_columns_from_filename, add_resolution_column!
 
 include("linked_data.jl")
 export particle_data_to_linked_data, batch_particle_data_to_linked_data, save_linked_data_with_metadata
-export find_trajectory_bounds, clip_trajectory_edges
+export find_trajectory_bounds, clip_trajectory_edges, link, add_useful_columns
 
 include("collapsed_data.jl")
 export load_linked_data, collapse_data, filter_trajectories

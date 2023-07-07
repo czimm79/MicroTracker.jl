@@ -65,4 +65,4 @@ trajectory_analyzer(linked_data, collapsed_data, chosen_particle)
 
 # What's next?
 1. Dive deeper with the included MicroTracker Pluto notebook and the the interactive version of the [`trajectory_analyzer`](@ref) on the [Pluto](@ref) page.
-2. Get started with using your own data and experiments in [Experimental](@ref).
+2. Get started with using your own data and experiments in [Experimental](@ref) and [Segmentation](@ref).
