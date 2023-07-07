@@ -16,26 +16,29 @@ Open a terminal window and type `julia`. You should be able to run simple comman
 
 ![1 plus 1 in julia](./assets/opening julia.png)
 
+## Open a Julia REPL in a directory
+Its easiest to use MicroTracker if you know how to open a terminal at a specific directory. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
+
+If for some reason you can't/don't want to add Julia to your PATH, you can use the Base Julia function `cd` to navigate to your folder. Verify your directory with the `pwd` function.
+
 ## Creating an environment for your project
 Now we need a place for our MicroTracker project to live. This will contain all the microscopy video, data we will generate, and tools we will use to analyze our data.
 
-To do this, just create a new empty folder. Name it descriptively, like `2023-06-21 microwheel field sweep`. For this page, I'll just create a folder named `tutorial`.
+To do this, just create a new empty folder. Name it descriptively, like `2023-06-21 microwheel field sweep`. For this page, I'll just create a folder named `tutorial`. Open a Julia REPL in this directory as described in the above section.
 
-Next, you need to open a terminal at this location. On Windows, I use [the new Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-us&gl=us&rtc=1) which allows you to right click in a folder and click "Open in Terminal". You can also type in the explorer address bar `cmd` to [get the same effect](https://www.youtube.com/watch?v=JLqIkPfU_0U). On Mac, right click on the *folder* and click `New Terminal at Folder`. Once the terminal is open, you should be able to type `julia` to enter the Julia REPL.
-
-Now, type `]` at the empty `julia>` prompt, before typing anything else. This enters you into [package mode](https://docs.julialang.org/en/v1/stdlib/Pkg/). You'll notice that now instead of `julia>`, you see the name of the current environment in blue. Now, type the following to create a new environment in your current folder:
+Now, type `]` at the empty `julia>` prompt, before typing anything else. This enters you into [package mode](https://docs.julialang.org/en/v1/stdlib/Pkg/). You'll notice that now instead of `julia>`, you see the name of the current environment in blue. Now, use the following commands to create a new environment in your current folder:
 
 ```julia-repl
 (@v1.9) pkg> activate .
 Activating new project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
 
-(tutorial) pkg> add https://github.com/czimm79/MicroTracker.jl Pluto
+(tutorial) pkg> add MicroTracker Pluto PlutoUI
 ...output snipped
 ```
 
-and wait as the packages and all of their dependencies download! 
+and wait as the packages and all of their dependencies download! This adds MicroTracker, Pluto, and PlutoUI packages to your environment. If you do not plan on using the included Pluto notebook, then only MicroTracker is needed.
 
-!!! important 
+!!! tip 
     When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as this environment contains everything needed to process and visualize your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
 
 ## Create a MicroTracker project
@@ -62,10 +65,27 @@ tutorial/
 ├── linked_data/
 │   └── (B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0,   
 │        STUBS_SECONDS = 0.5).csv
-└── notebook.jl
+└── microtracker_notebook.jl
 ```
 
 - `original_video` The raw microscopy video goes here, in the Image Sequence format (folders of `.tif` images). Many microscopes output automatically in this format, or [Fiji](https://imagej.net/software/fiji/) can be used to save almost any format into the Image Sequence format.
 - `particle_data` This is where a `.csv` file for each video, with the same filename, will be located. These csv files are the result of segmentation, which is explained thoroughly in the next page of the manual!
 - `linked_data` This is the primary output of MicroTracker. This is where `.csv` files are output that contains data for *every* microbot across *all* videos. This ensures that all analysis is carried out with the same parameters.
-- `notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
+- `microtracker_notebook.jl` A [Pluto](https://github.com/fonsp/Pluto.jl) notebook containing a sample workflow and plots. An easy alternative to typing in the command prompt.
+
+## Subsequent sessions
+After closing out Julia or restarting your computer, you'll have to re-open a Julia REPL in the same folder as explained in the [Open a Julia REPL in a directory](@ref) section. Don't forget to re-activate the environment you created and installed MicroTracker into. Remember, use `]` to get into [Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/) to run the `activate .` command.
+
+```julia-repl
+julia> pwd()
+"R:\\Wormhole\\OneDrive\\Research\\Papers\\JOSS_microtracker\\tutorial"
+
+(v1.9)> activate .
+Activating project at `R:\Wormhole\OneDrive\Research\Papers\JOSS_microtracker\tutorial`
+
+julia> using MicroTracker
+```
+
+### Alternatives
+1. If you open the Pluto notebook as described on the [Pluto](@ref) page, you do not need to activate the environment.
+2. VSCode.

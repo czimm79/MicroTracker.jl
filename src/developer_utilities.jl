@@ -74,3 +74,16 @@ function translation_dict_to_string(translation_dict::Dict)
     return join([string(k, "=", repr(v)) for (k, v) in translation_dict], ", ")
 end
 
+"""
+    parse_to_tuple(s::AbstractString)
+
+Convert a string to a Tuple{Int64, Int64}. Internal function used in [`load_linked_data`](@ref).
+"""
+function parse_to_tuple(s::AbstractString)
+    # remove the parenthesis and split the string by comma
+    str_numbers = split(replace(s, r"[()]" => ""), ",") 
+    # convert the string numbers to integers
+    numbers = parse.(Int64, str_numbers)
+    # convert the array to a tuple
+    return Tuple(numbers)
+end

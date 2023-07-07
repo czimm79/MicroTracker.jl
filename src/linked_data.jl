@@ -3,7 +3,7 @@
 """
     find_relevant_FPS(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
 
-Used to allow for the FPS to be specified in the filename, or in the linking_settings. 
+Used to allow for the FPS to be specified either in the filename or in the linking_settings. 
 
 If FPS is in the particle_data, it will be used. If FPS is in the linking_settings, it will be used. If FPS is in both, an error will be thrown.
 """
@@ -32,18 +32,19 @@ function find_relevant_FPS(particle_data::AbstractDataFrame, linking_settings::N
 end
 
 """
-    link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
+    link(particle_data::AbstractDataFrame, linking_settings::NamedTuple; trackpykwargs...)
 
 Use trackpy to link particle data into trajectories across frames.
 
-`linking_settings` is a `NamedTuple` with the following all caps fields:
-- `SEARCH_RANGE_MICRONS::Float64`:  microns/s. Fastest a particle could be traveling.
-- `MPP::Float64`: Microns per pixel, scale of objective.
-- `FPS::Float64`: Frames per second. **Can omit if the FPS has been specified in the filename.**
-- `STUBS_SECONDS::Float64`: seconds. All trajectories that exist less than this will be removed.
-- `MEMORY::Int64`: Number of frames the particle can dissapear and still be remembered.
+See the [Linking Settings](@ref) docs for the fields and format of `linking_settings`. Any kwargs will be passed to the trackpy.link
+function [trackpy.link](https://soft-matter.github.io/trackpy/v0.6.1/generated/trackpy.link.html#trackpy.link).
+
+# Example
+```julia-repl
+julia> link(particle_data, linking_settings)
+```
 """
-function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
+function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple; trackpykwargs...)
     SEARCH_RANGE_MICRONS = linking_settings.SEARCH_RANGE_MICRONS
     MPP = linking_settings.MPP
     FPS = find_relevant_FPS(particle_data, linking_settings)
@@ -63,7 +64,7 @@ function link(particle_data::AbstractDataFrame, linking_settings::NamedTuple)
 
     @info "Linking $(filename) ..."
     tp.quiet()  # make it quiet, I don't need to see the result of every frame
-    linked = tp.link(py_particle_data, search_range=SEARCH_RANGE, memory=MEMORY)
+    linked = tp.link(py_particle_data, search_range=SEARCH_RANGE, memory=MEMORY, trackpykwargs...)
     linked_without_stubs = tp.filter_stubs(linked, STUBS)
 
     @info """  
@@ -91,10 +92,23 @@ end
 """
     add_useful_columns(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
 
-After linking, add some useful columns to the dataframe. 
+After linking, add some useful columns to the dataframe, like include dx, dy, dp (speed), and size measurements in microns. 
 
-These include dx, dy, dp (velocity), and size measurements in microns. 
-(more detailed docs needed if this is an interface for users)
+Uses the [`numerical_derivative`](@ref) and [`total_displacement`](@ref) functions.
+
+# Definitions
+- `particle_unique` : a string which uniquely identifies a particle. This is a combination of the filename and the particle number.
+- `dx` : numerical derivative of `x`, i.e. instantaneous velocity in the x direction. Units of pixels/frame.
+- `dy` : numerical derivative of `y`, i.e. instantaneous velocity in the y direction. Units of pixels/frame.
+- `dp` : instantaneous speed. √(dx^2 + dy^2). Units of pixels/frame.
+- `dx_um` : dx converted to µm/s.
+- `dy_um` : dy converted to µm/s.
+- `dp_um` : dp converted to µm/s.
+- `total_displacement_um` : total displacement of the microbot. Constant on every row, since this is a total. Units of µm.
+- `Area_um` : area of the microbot. Units of µm^2.
+- `time` : time, converted from the frame column. Units of seconds.
+- `Major_um` : major axis of the fit ellipse of the microbot. Units of µm.
+- `Minor_um` : minor axis of the fit ellipse of the microbot. Units of µm.
 """
 function add_useful_columns(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
     MPP = linking_settings.MPP
@@ -133,11 +147,12 @@ see the MicroTracker docs (ref needed).
 function particle_data_to_linked_data(video_name::AbstractString, translation_dict::Dict, linking_settings::NamedTuple)
     particle_data = load_particle_data(video_name)
     particle_data_with_exp_info = add_info_columns_from_filename(particle_data, translation_dict)
-    MicroTracker.add_resolution_column!(particle_data_with_exp_info) # add resolution column inplace
     linked_data = link(particle_data_with_exp_info, linking_settings)
+    MicroTracker.add_resolution_column!(linked_data) # add resolution column inplace
     linked_data_with_useful_columns = add_useful_columns(linked_data, linking_settings)
+    clipped_linked_data = clip_trajectory_edges(linked_data_with_useful_columns, linking_settings)
 
-    return linked_data_with_useful_columns
+    return clipped_linked_data
 end
 
 """
@@ -148,7 +163,7 @@ Process all `.csv` files in `particle_data` into linked trajectory data and conc
 Returns a `DataFrame` containing all linked data for the entire experimental array. This is also saved to `linked_data` 
 using [`save_linked_data_with_metadata`](@ref) for record keeping and further analysis.
 
-The `translation_dict`` is a dictionary detailing the information contained in the filename. `linking_settings` contains the input
+The `translation_dict` is a dictionary detailing the information contained in the filename. `linking_settings` contains the input
 parameters for the linking algorithm and microscope information. Only one of these arguments may contain the `FPS`.
     
 For full explanation, see the MicroTracker [Linking](@ref) docs.
@@ -218,12 +233,11 @@ until it finds a point that is out of bounds. This is the high and low bound of 
 function find_trajectory_bounds(df_1particle::AbstractDataFrame)
     unique(df_1particle.particle_unique) |> length > 1 && error("More than one particle in df_1particle")
     video_resolution = df_1particle.video_resolution[1]
-
 	# particle name
     particle_name = df_1particle.particle_unique[1]
 
-    # find radius
-	radius = maximum(df_1particle.Major) / 2
+    # find radius for clipping region. Will set 70% larger than radius
+	radius = quantile(df_1particle.Major, 0.95) / 1.3
 
 	# Find midpoint, or center of trajectory idxs
 	nrows, ncols = size(df_1particle)
@@ -258,10 +272,12 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame)
 end
 
 """
-	clip_trajectory_edges(linked_data::AbstractDataFrame)
+	clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
 Iterate through each trajectory and remove the tracking data where the particle is out of frame.
 
 The particle is out of frame when the center is within the radius of the particle from the edge of the video.
+
+Uses [`find_trajectory_bounds`](@ref) to find the bounds of the trajectory with [`inbounds`](@ref).
 """
 function clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings::NamedTuple)
     STUBS_SECONDS = linking_settings.STUBS_SECONDS

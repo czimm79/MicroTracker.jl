@@ -1,4 +1,4 @@
-#@testset "numerical functions" begin
+@testset "numerical functions" begin
     xs = 1.0:201 |> collect
     ys = 2:500 |> collect
 
@@ -16,8 +16,9 @@
     ellipse_xs, ellipse_ys = MicroTracker.ellipse(major, minor, pos, angle)
     @test maximum(ellipse_xs) == major/2
     @test isapprox(maximum(ellipse_ys), minor/2, rtol=0.01)
-#end
 
+    @test MicroTracker.parse_to_tuple("(700, 500)") |> typeof == Tuple{Int64, Int64}
+end
 
 @testset "FFT + line fitting" begin
     error_tolerance = 0.055

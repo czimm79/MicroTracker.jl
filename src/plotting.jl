@@ -8,6 +8,11 @@ To plot a single microbot's trajectory, use [`plotannotatedframe_single`](@ref).
 function plotannotatedframe(linked_data::AbstractDataFrame, filename::AbstractString, framenumber::Int; showimage=true, showellipse=true, plotkwargs...)
     filename ∈ linked_data.filename || error("The filename $filename was not found in linked_data")
     df = @subset(linked_data, :filename .== filename, :frame .<= framenumber)
+    video_resolution = first(df.video_resolution)
+    
+    if typeof(video_resolution) <: AbstractString   # catch if its not a tuple
+        video_resolution = parse_to_tuple(video_resolution)
+    end
 
     if showimage
         img = loadframe(filename, framenumber)
@@ -30,6 +35,11 @@ function plotannotatedframe(linked_data::AbstractDataFrame, filename::AbstractSt
             plot!(ellipse_xs, ellipse_ys, lw=1, color=:cyan, α=0.8)
         end
     end
+
+    if showimage == false  # make the limits view the entire video by default
+        plot!(;xlims=(-100, video_resolution[1]+100), yflip=true, ylims=(-100, video_resolution[2]+100))
+    end
+
     plot!(;titlefontsize=8, plotkwargs...)
     p
 end
@@ -88,24 +98,28 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
         framenumber = df.frame[end]
     end
 
+    # find the time that corresponds to the framenumber
+    idx = findfirst(df.frame .== framenumber)
+    t = df[idx, :time]
+
     # Instantaneous velocity plot
     p1 = plot(df.time, df.dp_um, xlabel="Time (s)", ylabel="Speed (µm/s)")
     hline!([V̄], ls=:dot, lw=2, color=:black)
-    vline!([df[framenumber, :time]], color=:grey, lw=1)
-    annotate!(upperright(p1)..., text("V_avg = $(round(V̄, digits=2)) μm/s", 7, :right))
+    vline!([t], color=:grey, lw=1)
+    annotate!(upperright(p1)..., text("Mean = $(round(V̄, digits=2)) μm/s", 7, :right))
 
     # Size
     p2 = plot(df[!,:time], df[!, size_variable], xlabel="Time (s)", ylabel=size_variable)
     if size_variable == "Major_um"
         ylabel!("Major axis (µm)")
     end
-    vline!([df[framenumber, :time]], color=:grey, lw=1)
+    vline!([t], color=:grey, lw=1)
     annotate!(upperright(p2)..., text("R = $(round(R, digits=1)) μm", 7, :right))
 
     # fft
     xf, yf = fftclean(df.time, df[!, size_variable])
     p3 = plot(xf, yf, xlabel="Frequency (Hz)", ylabel="Amplitude")
-    annotate!(upperright(p3)..., text("Ω_est = $(round(Ω_est, digits=1)) Hz", 7, :right))
+    annotate!(upperright(p3)..., text("Estimated Ω = $(round(Ω_est, digits=1)) Hz", 7, :right))
 
     # trajectory
     p4 = plotannotatedframe_single(@subset(linked_data, :frame .<= framenumber), particle_unique, framenumber; annotationkwargs...)
