@@ -1,4 +1,4 @@
-# Functions relating to working on particle_data. I.E., non-linked data from ImageJ.
+# Functions relating to working on particle_data. I.E., segmented data from ImageJ or illastik.
 
 """
     get_names_in_particle_data()
@@ -15,7 +15,13 @@ end
 
 When using ImageJ data, the frame column does not exist, so we need to pull it out of the label column.
 
-This function assumes the frame number is at the end of the label, and that it is the only number in the label.
+This function assumes the frame number is at the end of the label.
+
+# Example
+```jldoctest
+julia> MicroTracker.extract_frame_from_label("5_8p4_28p68:slice:51")
+51
+```
 """
 function extract_frame_from_label(label::AbstractString)
     re = r"[0-9]+$" # regex to find digits at end of string
@@ -27,12 +33,13 @@ end
 """
     load_particle_data(video_name::AbstractString)
     
-Read a particle data `.csv` into a `DataFrame`. Assumes the `.csv` file is in the `particle_data` folder.
+Read a particle data `.csv` located in `/particle_data` into a `DataFrame`.
 
-If the `.csv` file is from ImageJ, it will:
-1. Extract the frame number from the label column and add it as a new column.
-2. Rename the `X` and `Y` columns to `x` and `y` so it works with `trackpy`.
-3. Remove any blank columns.
+If the `.csv` file is from ImageJ (contains X, Y, and Label columns, not x, y, and frame), it will:
+1. Extract the frame number from the label column and add it as a new column using [`extract_frame_from_label`](@ref)
+2. Rename the `X` and `Y` columns to `x` and `y` so it works with [`link`](@ref).
+3. Remove any columns with a blank name.
+4. Rename the `Circ.` column to `Circ` so it works with Julia symbol notation.
 """
 function load_particle_data(video_name::AbstractString)
     @info "Loading particle data for $video_name"
@@ -68,16 +75,11 @@ end
 """
     add_info_columns_from_filename(particle_data::AbstractDataFrame, translation_dict::AbstractDict)
 
-Extract experimental metadata from the `filename` column and create a new column for each.
+Extract experimental metadata from the `filename` column and create a new column for each in `particle_data`. Returns
+a new `DataFrame`.
 
 Assumes the filename is separated by underscores and periods are denoted by `p`. The `translation_dict`
-details the filename format. For full explanation, see the MicroTracker docs (ref needed).
-
-# Example
-```jldoctest
-julia> test_filename = "5_13p5_61p35"
-"5_13p5_61p35"
-```
+details the filename format. For full explanation, see the MicroTracker docs: [Translation Dictionary](@ref).
 """
 function add_info_columns_from_filename(particle_data::AbstractDataFrame, translation_dict::Dict)
     @info "adding info columns: $(keys(translation_dict))"
@@ -101,9 +103,12 @@ function add_info_columns_from_filename(particle_data::AbstractDataFrame, transl
 end
 
 """
-    add_resolution_column(particle_data::AbstractDataFrame)
+    add_resolution_column!(particle_data::AbstractDataFrame)
 
-Look at a frame of the video in `original_video` which corresponds to the data and add a column.
+Look at a frame of the video in `original_video` which corresponds to the data and add a column for the resolution
+of type Tuple{Int, Int}. Modifies `particle_data` in place, signfified by the `!` in the function name.
+
+Uses [`getvideoresolution`](@ref).
 """
 function add_resolution_column!(particle_data::AbstractDataFrame)
         res = getvideoresolution(particle_data.filename[1])

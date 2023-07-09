@@ -21,6 +21,7 @@ makedocs(;
                      "pluto.md",
                      "linking.md",
                      "collapsing.md",
+                     "visualization.md",
                      "experimental.md",  
                      "segmenting.md", 
                      ],

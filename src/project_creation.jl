@@ -23,9 +23,10 @@ function create_project_here(;include_examples=true)
 
     assets_path = get_assets_path()
 
-    # copy over notebook
-    notebook_path = joinpath(assets_path, "notebook.jl")
-    cp(notebook_path, joinpath(pwd(), "notebook.jl"))
+    # copy over microtracker_notebook
+    notebook_path = joinpath(assets_path, "microtracker_notebook.jl")
+    cp(notebook_path, joinpath(pwd(), "microtracker_notebook.jl"))
+    chmod(joinpath(pwd(), "microtracker_notebook.jl"), 0o666)  # make sure the notebok has write permissions
 
     if include_examples
         # copy over particle data
