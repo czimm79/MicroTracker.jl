@@ -1,17 +1,16 @@
 <h1><img alt="MicroTracker.jl" src="https://github.com/czimm79/MicroTracker.jl/assets/49537407/a6562792-4953-46cb-8e3a-7eba9ba8ee06" width=426 height=81.4 ></h1>
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/)
+[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/)
 [![Build Status](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![Coverage](https://codecov.io/gh/czimm79/MicroTracker.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/czimm79/MicroTracker.jl)
 
 MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package that tracks and analyzes moving [microbots](https://www.nature.com/articles/s41467-020-19322-7) in microscopy video. This package allows tracking of critical microbot metrics including size, velocity, and rotation rate, enabling high-throughput analysis of experimental data.
 
-https://github.com/czimm79/MicroTracker.jl/assets/49537407/94a938f3-3453-4592-bf68-36b9e59b7f2e
+https://github.com/czimm79/MicroTracker.jl/assets/49537407/12c9a035-8b00-4576-a21b-ec7b8fa87629
 
 For more information on microbots and this package, please see the short [paper](https://github.com/czimm79/MicroTracker.jl/blob/master/paper/paper.md).
 
- To get started, view the docs by clicking the [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://czimm79.github.io/MicroTracker.jl/stable/) badge and click **Quick Start** on the left side. This package is designed for users with limited coding or Julia experience. If there is anything that is difficult to understand, please raise an issue or start a pull request.
+To get started, view the docs by clicking the [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/) badge and click **Quick Start** on the left side. This package is designed for users with limited coding or Julia experience. Please raise an issue or start a pull request if anything could be improved.
 
 ## Collaboration/Contributing
 MicroTracker is built for collaboration and use across the microbot research field. To get started contributing and improving the package, see the [setup guide](https://czimm79.github.io/MicroTracker.jl/dev/settingupdev/).
