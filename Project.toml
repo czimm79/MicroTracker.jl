@@ -1,7 +1,7 @@
 name = "MicroTracker"
 uuid = "f2f4b30c-0e7b-4018-b992-2f46df5706a6"
 authors = ["Coy Zimmermann"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
