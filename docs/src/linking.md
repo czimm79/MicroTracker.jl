@@ -2,10 +2,10 @@
 
 On this page, you will process the segmented data in `particle_data` into a single `linked_data` which contains the time-series trajectory data for all tracked microbots.
 
-These commands can be run in the Julia REPL or in the generated Pluto notebook file after [Creating an environment for your project](@ref). See the [Pluto](@ref) tutorial page to see an established workflow.
+These commands can be run in the Julia REPL or in the generated Pluto notebook file after [Creating an environment for your project](@ref). See the [Pluto](@ref) tutorial page to see how to open and use the notebook.
 
 ## Input parameters
-Now, let's format our inputs to the linking process, the `translation_dict` and `linking_settings`.
+First, let's format our inputs to the linking process, the `translation_dict` and `linking_settings`.
 
 ### Translation Dictionary
 Provided you've followed the requirements for filenaming detailed in [Experimental](@ref), you now need to tell MicroTracker what your independent variables are. This is in the form of a Dictionary where the key is the name of the variable and the value is a tuple of the index and type. Following the example in [Experimental](@ref), we have a filename that looks like `32_6p2_1`. The translation dictionary would then look like:
@@ -20,7 +20,7 @@ In plain english, this is telling MicroTracker that the temperature is recorded 
 - `Float64` Most variables, a floating point number.
 - `String` If the variable makes most sense if its a string. Like `"washed"` or `"aerosolized"`.
 
-Here, we know the FPS of our videos is constant across all videos, so we'll include it in the `linking_settings` below.
+In this example detailed in [Experimental](@ref) we know the FPS of our videos is constant across all videos, so we'll include it in the `linking_settings` below.
 
 ### Linking Settings
 The linking settings are in the format of a `NamedTuple`. This `linking_settings` contains information about your video, like the microns per pixel (MPP) of your microscope setup and the frames per second of your video (FPS). It also contains parameters to feed to the underlying linking machinery in [trackpy.link](https://soft-matter.github.io/trackpy/v0.6.1/generated/trackpy.link.html#trackpy.link).

@@ -160,7 +160,7 @@ Export an animation of the trajectory analyzer and save it to `savepath`.
 julia> trajectory_analyzer(linked_data, collapsed_data, "5_13p5_61p35-2", "my_animation.mp4")
 [ Info: Creating animation: Frame = 5
 ...
-[ Info: Saved animation to ~/myanimation.gif
+[ Info: Saved animation to ~/my_animation.mp4
 ```
 """
 function animate_trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::AbstractDataFrame, 

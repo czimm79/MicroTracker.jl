@@ -1,6 +1,6 @@
 # Quick Start
 
-This page is an abridged version of the documentation which runs through using MicroTracker with sample data. At the end of each bullet, there will be a link to the full section for more detailed explanation.
+This page is an abridged version of the documentation which runs through using MicroTracker with sample data. At the end of each bullet, there is a link to the full section with more detailed explanation.
 
 - **Install Julia** from their [website](https://julialang.org/downloads/platform/), making sure to add julia to your PATH. ([Download and install Julia](@ref))
 - **Open a terminal** in a new empty folder, and type `julia` to open a julia REPL in that directory. ([Open a Julia REPL in a directory](@ref))
