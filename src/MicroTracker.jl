@@ -16,13 +16,17 @@ function __init__()
     @info "Setting PyCall to use the Python in the root Conda.jl environment."
     ENV["PYTHON"] = joinpath(Conda.PYTHONDIR, "python")
 
-    # Add Conda packages
-    Conda.add("numpy")
-    Conda.add("pandas")
-    
-    # Adding trackpy from the conda-forge channel
-    Conda.add_channel("conda-forge")
-    Conda.add("trackpy")
+    if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages())))
+        # if the needed python packages are not installed in the root Conda.jl env
+        
+        # Add Conda packages
+        Conda.add("numpy")
+        Conda.add("pandas")
+        
+        # Adding trackpy from the conda-forge channel
+        Conda.add_channel("conda-forge")
+        Conda.add("trackpy")
+    end
 
     copy!(np, pyimport("numpy"))
     copy!(tp, pyimport("trackpy"))
