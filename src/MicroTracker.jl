@@ -18,9 +18,19 @@ const tp = PyNULL()
 const pd = PyNULL()
 
 function __init__()
-    copy!(np, pyimport_conda("numpy", "numpy"))
-    copy!(tp, pyimport_conda("trackpy", "trackpy", "conda-forge"))
-    copy!(pd, pyimport_conda("pandas", "pandas"))
+
+    # Add Conda packages
+    Conda.add("numpy")
+    Conda.add("pandas")
+    
+    # Adding trackpy from the conda-forge channel
+    Conda.add_channel("conda-forge")
+    Conda.add("trackpy")
+
+    copy!(np, pyimport("numpy"))
+    copy!(tp, pyimport("trackpy"))
+    copy!(pd, pyimport("pandas"))
+    
 end
 
 using CSV, DataFrames, DataFramesMeta  # data manipulation
