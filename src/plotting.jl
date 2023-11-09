@@ -94,7 +94,7 @@ function trajectory_analyzer(linked_data::AbstractDataFrame, collapsed_data::Abs
 
     # check if framenumber is valid
     if framenumber > df.frame[end]
-        @warn "framenumber $framenumber is greater than the last frame in the data, $(df.frame[end]). Using the last frame instead."
+        @info "framenumber $framenumber is greater than the last frame in the data, $(df.frame[end]). Using the last frame instead."
         framenumber = df.frame[end]
     end
 
