@@ -13,7 +13,7 @@ const pd = PyNULL()
 
 function __init__()
     copy!(np, pyimport_conda("numpy", "numpy"))
-    copy!(tp, pyimport_conda("trackpy", "trackpy"))
+    copy!(tp, pyimport_conda("trackpy", "trackpy", "conda-forge"))
     copy!(pd, pyimport_conda("pandas", "pandas"))
 end
 
