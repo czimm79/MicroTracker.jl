@@ -3,8 +3,6 @@ macro isplot(ex) # @isplot macro to streamline tests, from Plots.jl
 end
 
 @testset "plotting" begin
-    gr(show=false)  # supress showing plots 
-
     linked_data = cd(()->load_linked_data("(B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0, STUBS_SECONDS = 0.5).csv"),
         get_assets_path())
     test_translation_dict = Dict("f_Hz"=>(1, Int64), "B_mT"=>(2, Float64), "FPS"=>(3, Float64))
@@ -24,6 +22,4 @@ end
     cd(()->animate_trajectory_analyzer(linked_data, collapsed_data, all_particle_names[1], "test_animation.mp4", 120:121), get_assets_path())
     @test cd(()->isfile("test_animation.mp4"), get_assets_path())
     cd(()->rm("test_animation.mp4"), get_assets_path())
-
-    gr(show=true) # reenable showing plots
 end
