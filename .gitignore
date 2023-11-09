@@ -7,3 +7,5 @@
 /.CondaPkg
 /docs/.CondaPkg
 /docs/.DS_Store
+.DS_Store
+/paper/.DS_Store
