@@ -5,7 +5,13 @@ module MicroTracker
 # See PyCall docs on how this was set up
 # https://github.com/JuliaPy/PyCall.jl#quick-start
 
-using Conda, PyCall 
+using Conda
+
+# Set the PYTHON environment variable to use Conda's Python
+@info "Setting PyCall to use the Python in the root Conda.jl environment."
+ENV["PYTHON"] = joinpath(Conda.PYTHONDIR, "python")
+
+using PyCall
 
 const np = PyNULL()
 const tp = PyNULL()
