@@ -21,6 +21,7 @@ using CSV, DataFrames, DataFramesMeta  # data manipulation
 using Optim, Statistics, FFTW  # FFT
 using Reexport
 using ImageIO, FileIO  # image loading, can also use Images but this is more lightweight
+using Pkg.Artifacts
 @reexport using DataFramesMeta  # This also reexports DataFrames for users
 @reexport using StatsPlots  # also reexports Plots
 

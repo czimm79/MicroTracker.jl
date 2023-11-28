@@ -3,6 +3,11 @@ using Test
 
 include("numerical_tests.jl")
 
+@testset "Artifact download" begin
+    MicroTracker.download_original_video_artifact()
+    @test MicroTracker.verify_download()
+end
+
 @testset "Project Creation" begin
     # use the create project function and then check that the folders are there
     testfolder = "deletethis"

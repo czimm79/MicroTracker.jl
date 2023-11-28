@@ -1,5 +1,5 @@
 """
-    get_asset_path()
+    get_assets_path()
 
 Always returns the path to the assets folder in the package root directory.
 
@@ -86,4 +86,71 @@ function parse_to_tuple(s::AbstractString)
     numbers = parse.(Int64, str_numbers)
     # convert the array to a tuple
     return Tuple(numbers)
+end
+
+"""
+    download_original_video_artifact()
+
+Use the Artifacts Pkg system to fetch the example video and download into the assets folder.
+"""
+function download_original_video_artifact()
+    @info "Downloading example videos..."
+    artifact_path = artifact"original_video"  # origin
+    video_names = filter(s->!startswith(s, "."), readdir("$artifact_path/original_video"))
+
+    assets_path = get_assets_path()  # destination
+
+    # check if they've already been downloaded
+    if isdir("$assets_path/original_video")
+        if verify_download()
+            @info "Download verified."
+            return
+        end
+    end
+
+    mkdir("$assets_path/original_video")
+    for vidname in video_names
+        video_artifact_path = "$artifact_path/original_video/$vidname"
+        imgnames = filter(s->!startswith(s, "."), readdir(video_artifact_path))  # array of tif names
+        mkdir("$assets_path/original_video/$vidname")
+        for i in imgnames
+            cp("$video_artifact_path/$i", "$assets_path/original_video/$vidname/$i")
+        end    
+    end
+    @info "Example videos successfully copied."
+    
+end
+
+"""
+    verify_download()
+
+Verify that the example videos are downloaded into the MicroTracker assets folder in their entirety.
+
+Returns true or false.
+"""
+function verify_download()
+    assets_path = get_assets_path()
+    
+    # check if everything is there. If all pass, return true.
+    original_video_dirname = "$assets_path/original_video"
+    if isdir(original_video_dirname)
+        measured_video_names = readdir(original_video_dirname)
+        if all(["5_13p5_61p35", "5_8p4_28p68"] .∈ Ref(measured_video_names))
+            # the video folders exist. now check the tifs in each.
+            imgnames_513 = ["a$(string(num,pad=4)).tif" for num in 0:362]
+            imgnames_584 = ["a$(string(num,pad=4)).tif" for num in 0:40]
+
+            measured_imgnames_513 = readdir("$original_video_dirname/5_13p5_61p35")
+            measured_imgnames_584 = readdir("$original_video_dirname/5_8p4_28p68")
+
+            for (actual, measured) in zip([imgnames_513, imgnames_584], [measured_imgnames_513, measured_imgnames_584])
+                if !(all(measured .∈ Ref(actual)))
+                    return false
+                end
+            end
+            # Everything passed!
+            return true
+        end
+    end
+    return false
 end

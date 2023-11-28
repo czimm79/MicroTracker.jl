@@ -16,6 +16,9 @@ julia> create_project_here()
 ```
 """
 function create_project_here(;include_examples=true)
+    # download example video Artifact from github
+    MicroTracker.download_original_video_artifact()
+    
     # make the general structure
     mkdir("particle_data")
     mkdir("linked_data")
