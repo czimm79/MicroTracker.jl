@@ -16,9 +16,6 @@ julia> create_project_here()
 ```
 """
 function create_project_here(;include_examples=true)
-    # download example video Artifact from github
-    MicroTracker.download_original_video_artifact()
-    
     # make the general structure
     mkdir("particle_data")
     mkdir("linked_data")
@@ -41,6 +38,9 @@ function create_project_here(;include_examples=true)
         end
 
         # copy over videos
+        # download example video Artifact from github
+        MicroTracker.download_original_video_artifact()
+    
         example_original_video_path = joinpath(assets_path, "original_video")
         example_video_paths = [joinpath(example_original_video_path, i) for i in readdir(example_original_video_path)]
 
