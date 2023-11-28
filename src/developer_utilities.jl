@@ -154,3 +154,22 @@ function verify_download()
     end
     return false
 end
+
+"""
+    check_working_directory()
+
+Check if the MicroTracker folders are accessible from the current working directory.
+    
+Return true if folders are there, throws an error if not.
+"""
+function check_working_directory()
+    microtracker_folders = ["particle_data", "linked_data", "original_video"]
+    bitvector = map(i->isdir(i), microtracker_folders)
+    if !(all(bitvector))
+        error("""Cannot find the MicroTracker folders in the current directory.
+        1. Have you used the `create_project_here` function?
+        2. Are you in the correct directory? Use the `pwd` function to check.""")
+    else
+        return true
+    end
+end

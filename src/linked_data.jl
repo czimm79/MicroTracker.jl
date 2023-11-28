@@ -190,6 +190,7 @@ end
 Save linked data with the `translation_dict` and `linking_settings` in the filename. Will overwrite existing file.
 """
 function save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
+    MicroTracker.check_working_directory()
     dictstring = MicroTracker.translation_dict_to_string(translation_dict)
     filename = "($dictstring) - $(string(linking_settings))"
     path = "linked_data/$filename.csv"
