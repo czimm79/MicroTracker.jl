@@ -3,7 +3,14 @@ using Test
 
 include("numerical_tests.jl")
 
+@testset "Artifact download" begin
+    MicroTracker.download_original_video_artifact()
+    @test MicroTracker.verify_download()
+end
+
 @testset "Project Creation" begin
+    @test_throws ErrorException MicroTracker.check_working_directory()  # project isn't created yet, so should error
+
     # use the create project function and then check that the folders are there
     testfolder = "deletethis"
     mkdir(testfolder)
@@ -18,6 +25,8 @@ include("numerical_tests.jl")
     example_linked_data_filename = "(B_mT=(2, Float64), FPS=(3, Float64), f_Hz=(1, Int64)) - (MPP = 0.605, SEARCH_RANGE_MICRONS = 1000, MEMORY = 0, STUBS_SECONDS = 0.5).csv"
     @test isfile("linked_data/$example_linked_data_filename")
     @test isfile("microtracker_notebook.jl")
+
+    @test MicroTracker.check_working_directory()
 
     # create an imagej macro
     create_imagej_macro_here(MPP=0.605, minimum_segmentation_diameter=4.5)
