@@ -32,16 +32,16 @@ function __init__()
     
     @info "MicroTracker.jl is using Python located at $(ENV("PYTHON")) with the environment prefix $env."
 
-    if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages())))
+    if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages(env))))
         # if the needed python packages are not installed in the root Conda.jl env
         
-        # Add Conda packages
-        Conda.add("numpy")
-        Conda.add("pandas")
-        
         # Adding trackpy from the conda-forge channel
-        Conda.add_channel("conda-forge")
-        Conda.add("trackpy")
+        Conda.add_channel("conda-forge", env)
+        
+        # Add Conda packages
+        Conda.add("numpy", env)
+        Conda.add("pandas", env)
+        Conda.add("trackpy", env)
     end
 
     copy!(np, pyimport("numpy"))
