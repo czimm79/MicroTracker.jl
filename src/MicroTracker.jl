@@ -14,7 +14,23 @@ const pd = PyNULL()
 function __init__()
     # Set the PYTHON environment variable to use Conda's Python
     @info "Setting PyCall to use the Python in the root Conda.jl environment."
-    ENV["PYTHON"] = joinpath(Conda.PYTHONDIR, "python")
+    # 1. Use the environment variable CONDA_PREFIX if available, fallback to root env otherwise
+    default_env = get(ENV, "CONDA_PREFIX", Conda.ROOTENV)
+    # 2. Use the environment variable MICROTRACKER_PREFIX if available, fallback to conda_env otherwise
+    env = get(ENV, "MICROTRACKER_JL_PREFIX", default_env)
+    
+    python_in_env = joinpath(env, "bin", Sys.iswindows() ? "python.exe" : "python")
+    if isfile(python_in_env)
+        default_python = python_in_env
+    else
+        # Python is not where we expect it to be. Fallback to conservative defaults.
+        default_python = joinpath(Conda.PYTHONDIR, "python")
+        env = Conda.ROOTENV
+    end
+    # Do not override user if they have already set ENV["PYTHON"]
+    ENV["PYTHON"] = get(ENV, "PYTHON", default_python)
+    
+    @info "MicroTracker.jl is using Python located at $(ENV("PYTHON")) with the environment prefix $env."
 
     if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages())))
         # if the needed python packages are not installed in the root Conda.jl env
