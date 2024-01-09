@@ -5,7 +5,7 @@ module MicroTracker
 # See PyCall docs on how this was set up
 # https://github.com/JuliaPy/PyCall.jl#quick-start
 
-using Conda, PyCall, Pkg
+using Conda, PyCall
 
 const np = PyNULL()
 const tp = PyNULL()
@@ -26,10 +26,13 @@ function __init__()
         env = Conda.ROOTENV
     end
     # Do not override user if they have already set ENV["PYTHON"]
-    ENV["PYTHON"] = get(ENV, "PYTHON", default_python)
+    if PyCall.pyprogramname != default_python
+        ENV["PYTHON"] = get(ENV, "PYTHON", default_python)
+        @info "The Python environment has changed. Please run `using Pkg; Pkg.build(\"PyCall\")"
+    end
     #Pkg.build("PyCall")  # need to rebuild PyCall if ENV["PYTHON"] is set
     
-    @info "MicroTracker.jl is using Python located at $(ENV("PYTHON")) with the environment prefix $env."
+    @info "MicroTracker.jl is using Python located at $(ENV["PYTHON"]) with the environment prefix $env."
 
     if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages(env))))
         # if the needed python packages are not installed in the root Conda.jl env
