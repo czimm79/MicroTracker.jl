@@ -4,6 +4,7 @@
 Read a linked data `.csv` file into a `DataFrame`. Assumes the `.csv` file is in the `linked_data` folder.
 """
 function load_linked_data(filename)
+    MicroTracker.check_working_directory()
     df = CSV.read("linked_data/$filename", DataFrame)
 
     # make sure the video_resolution column is the correct Tuple type
