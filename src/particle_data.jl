@@ -6,6 +6,7 @@
 Return a list of all `.csv` files contained in the `particle_data` folder.
 """
 function get_names_in_particle_data()
+    MicroTracker.check_working_directory()
     csv_vector = filter!(x->occursin(".csv", x), readdir("particle_data"))
     [split(x, ".")[1] for x in csv_vector]  # remove the .csv extension
 end
@@ -42,6 +43,7 @@ If the `.csv` file is from ImageJ (contains X, Y, and Label columns, not x, y, a
 4. Rename the `Circ.` column to `Circ` so it works with Julia symbol notation.
 """
 function load_particle_data(video_name::AbstractString)
+    MicroTracker.check_working_directory()
     @info "Loading particle data for $video_name"
 
     df = CSV.read("particle_data/$video_name.csv", DataFrame)
