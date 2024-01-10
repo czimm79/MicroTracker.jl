@@ -28,12 +28,10 @@ function __init__()
     # Do not override user if they have already set ENV["PYTHON"]
     if PyCall.pyprogramname != default_python
         ENV["PYTHON"] = get(ENV, "PYTHON", default_python)
+        @info "MicroTracker.jl is using Python located at $(get(ENV, "PYTHON", default_python)) with the environment prefix $env."
         @info "The Python environment has changed. Please run `using Pkg; Pkg.build(\"PyCall\")"
     end
-    #Pkg.build("PyCall")  # need to rebuild PyCall if ENV["PYTHON"] is set
     
-    @info "MicroTracker.jl is using Python located at $(ENV["PYTHON"]) with the environment prefix $env."
-
     if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages(env))))
         # if the needed python packages are not installed in the root Conda.jl env
         
