@@ -1,0 +1,6 @@
+[original_video]
+git-tree-sha1 = "e8ec8660002cb0ce1a196857cd76759bc0d1b737"
+
+[[original_video.download]]
+url = "https://github.com/czimm79/MicroTracker.jl/releases/download/artifacts-1/original_video.tar.gz"
+sha256 = "4a97c1458232b767e14426093a4a7b5c77185e6bdb15bef1a8746f488d86a3a1"
