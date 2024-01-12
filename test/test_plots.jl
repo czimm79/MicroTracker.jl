@@ -22,5 +22,4 @@ end
     cd(()->animate_trajectory_analyzer(linked_data, collapsed_data, all_particle_names[1], "test_animation.mp4", 120:121), get_assets_path())
     @test cd(()->isfile("test_animation.mp4"), get_assets_path())
     cd(()->rm("test_animation.mp4"), get_assets_path())
-
 end
