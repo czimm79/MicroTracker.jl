@@ -47,7 +47,7 @@ MicroTracker interfaces with [trackpy](http://soft-matter.github.io/trackpy/v0.6
 To do this, MicroTracker uses the Julia packages [PyCall](https://github.com/JuliaPy/PyCall.jl#quick-start) and [Conda](https://github.com/JuliaPy/Conda.jl/tree/master) packages. 
 
 !!! note
-    The Python packages are installed using Conda into the ROOT Conda environment. Currently, PyCall [does not allow](https://github.com/JuliaPy/Conda.jl/blob/master/README.md#conda-environments) using Conda packages from custom Conda environments. When using MicroTracker, PyCall is set to use the Python inside the root Conda.jl environment.
+    By default, PyCall will install a minimal Python distribution that is private to Julia. If you'd like to change what Python environment you'd like to use for MicroTracker, you can set `ENV["MICROTRACKER_JL_PREFIX"]`, `ENV["CONDA_PREFIX"]`, or `ENV["PYTHON"]`. See the [PyCall](https://github.com/JuliaPy/PyCall.jl#installation) documentation for more information.
 
 ## Create a MicroTracker project
 Now that we have a new Julia environment in this folder with MicroTracker installed, lets start using MicroTracker! To import a package, Julia uses the keyword `using`. Make sure you're out of package mode by pressing `backspace`. The prompt should read `julia>` again. After that, we'll use the [`create_project_here`](@ref) function.
