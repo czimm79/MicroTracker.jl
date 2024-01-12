@@ -27,6 +27,7 @@ jobs:
           - x64
     env:
       PYTHON: ""
+      GKSwstype: "100" # https://discourse.julialang.org/t/generation-of-documentation-fails-qt-qpa-xcb-could-not-connect-to-display/60988
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@v1

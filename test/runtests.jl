@@ -1,5 +1,9 @@
 using MicroTracker
 using Test
+using Logging
+
+# Set logging level to `Warn` to suppress `@info` messages during tests
+global_logger(ConsoleLogger(stderr, Logging.Warn))
 
 include("numerical_tests.jl")
 
@@ -64,3 +68,6 @@ include("python_interactions.jl")
 include("linking_tests.jl")
 include("collapsed_tests.jl")
 include("test_plots.jl")
+
+# Reset the logger to the default level after testing
+global_logger(ConsoleLogger(stderr, Logging.Info))
