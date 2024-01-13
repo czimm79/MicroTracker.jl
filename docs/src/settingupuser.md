@@ -41,6 +41,14 @@ and wait as the packages and all of their dependencies download! This adds Micro
 !!! tip 
     When adding MicroTracker, Julia will also automatically precompile the environment to make future use of the package speedy. This may take awhile, as this environment contains everything needed to process and visualize your data. It also comes included with sample microscopy video, so it may take a little longer to download than other packages.
 
+### Python interface
+MicroTracker interfaces with [trackpy](http://soft-matter.github.io/trackpy/v0.6.1/), an established Python tracking package that implements the classic linking algorithm from Crocker-Grier[^1]. Mainly, MicroTracker uses the trackpy [`link`](http://soft-matter.github.io/trackpy/dev/generated/trackpy.link.html) function.
+
+To do this, MicroTracker uses the Julia packages [PyCall](https://github.com/JuliaPy/PyCall.jl#quick-start) and [Conda](https://github.com/JuliaPy/Conda.jl/tree/master) packages. 
+
+!!! note
+    By default, PyCall will install a minimal Python distribution that is private to Julia. If you'd like to change what Python environment you'd like to use for MicroTracker, you can set `ENV["MICROTRACKER_JL_PREFIX"]`, `ENV["CONDA_PREFIX"]`, or `ENV["PYTHON"]`. See the [PyCall](https://github.com/JuliaPy/PyCall.jl#installation) documentation for more information.
+
 ## Create a MicroTracker project
 Now that we have a new Julia environment in this folder with MicroTracker installed, lets start using MicroTracker! To import a package, Julia uses the keyword `using`. Make sure you're out of package mode by pressing `backspace`. The prompt should read `julia>` again. After that, we'll use the [`create_project_here`](@ref) function.
 
@@ -89,3 +97,5 @@ julia> using MicroTracker
 ### Alternatives
 1. If you open the Pluto notebook as described on the [Pluto](@ref) page, you do not need to activate the environment.
 2. VSCode.
+
+[^1]: J. C. Crocker and D. G. Grier, “Methods of Digital Video Microscopy for Colloidal Studies,” Journal of Colloid and Interface Science, vol. 179, no. 1, pp. 298–310, Apr. 1996, doi: 10.1006/jcis.1996.0217.

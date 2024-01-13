@@ -5,16 +5,49 @@ module MicroTracker
 # See PyCall docs on how this was set up
 # https://github.com/JuliaPy/PyCall.jl#quick-start
 
-using Conda, PyCall 
+using Conda, PyCall
 
 const np = PyNULL()
 const tp = PyNULL()
 const pd = PyNULL()
 
 function __init__()
-    copy!(np, pyimport_conda("numpy", "numpy"))
-    copy!(tp, pyimport_conda("trackpy", "trackpy"))
-    copy!(pd, pyimport_conda("pandas", "pandas"))
+    # 1. Use the environment variable CONDA_PREFIX if available, fallback to root env otherwise
+    default_env = get(ENV, "CONDA_PREFIX", Conda.ROOTENV)
+    # 2. Use the environment variable MICROTRACKER_PREFIX if available, fallback to conda_env otherwise
+    env = get(ENV, "MICROTRACKER_JL_PREFIX", default_env)
+    
+    python_in_env = joinpath(env, "bin", Sys.iswindows() ? "python.exe" : "python")
+    if isfile(python_in_env)
+        default_python = python_in_env
+    else
+        # Python is not where we expect it to be. Fallback to conservative defaults.
+        default_python = joinpath(Conda.PYTHONDIR, "python")
+        env = Conda.ROOTENV
+    end
+    # Do not override user if they have already set ENV["PYTHON"]
+    if PyCall.pyprogramname != default_python
+        ENV["PYTHON"] = get(ENV, "PYTHON", default_python)
+        @info "MicroTracker.jl is using Python located at $(get(ENV, "PYTHON", default_python)) with the environment prefix $env."
+        @info "The Python environment has changed. Please run `using Pkg; Pkg.build(\"PyCall\")"
+    end
+    
+    if !all(["numpy", "trackpy", "pandas"] .∈ Ref(collect(Conda._installed_packages(env))))
+        # if the needed python packages are not installed in the root Conda.jl env
+        
+        # Adding trackpy from the conda-forge channel
+        Conda.add_channel("conda-forge", env)
+        
+        # Add Conda packages
+        Conda.add("numpy", env)
+        Conda.add("pandas", env)
+        Conda.add("trackpy", env)
+    end
+
+    copy!(np, pyimport("numpy"))
+    copy!(tp, pyimport("trackpy"))
+    copy!(pd, pyimport("pandas"))
+    
 end
 
 using CSV, DataFrames, DataFramesMeta  # data manipulation
