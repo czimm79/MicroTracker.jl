@@ -34,4 +34,5 @@ The dependent packages for MicroTracker normally automatically install behind th
 GitHub Desktop makes proposing changes to a repository easy without learning git on the command line. The general workflow is detailed [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request?tool=desktop).
 ## Common hiccups
 1. Sometimes when changing the dependencies of MicroTracker, the CI for the docs will fail. I fixed this by activating the docs env using `activate ./docs` and then `resolve`.
+2. It can be tricky exporting an `environment.yml` file for reproducibility of Python packages if another conda is already installed on the system. To do this, open a terminal, and list the environments using `conda env list`. Copy and paste the filepath to the environment in the `.julia` file, as it is not named something useful like "base". Then, run `conda activate <copiedpath>`, then finally `conda env export > environment.yml`. The `environment.yml` will be exported in the terminal's working directory.
 

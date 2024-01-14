@@ -190,6 +190,7 @@ end
 Save linked data with the `translation_dict` and `linking_settings` in the filename. Will overwrite existing file.
 """
 function save_linked_data_with_metadata(linked_data::AbstractDataFrame, translation_dict::Dict, linking_settings::NamedTuple)
+    MicroTracker.check_working_directory()
     dictstring = MicroTracker.translation_dict_to_string(translation_dict)
     filename = "($dictstring) - $(string(linking_settings))"
     path = "linked_data/$filename.csv"
@@ -251,7 +252,7 @@ function find_trajectory_bounds(df_1particle::AbstractDataFrame)
 	for (idx, i) in pairs(eachrow(df_1particle)[center_idx:end-1])
 		if !inbounds(i, radius, video_resolution)
 			if idx == 1 
-				@warn "Center point of trajectory $particle_name is out of bounds."
+				@info "Center point of trajectory $particle_name is out of bounds."
                 return (-1, -1)
 			end
 			
@@ -293,7 +294,7 @@ function clip_trajectory_edges(linked_data::AbstractDataFrame, linking_settings:
 		#@info "Clipping info" frames first(i.particle_unique)
 		j = @subset(i, :frame .> frames[1], :frame .< frames[2])
 		if size(j)[1] < STUBS
-			@warn "Snipped trajectory from $(first(i.particle_unique)) is now too short. Deleting."
+			@info "Snipped trajectory from $(first(i.particle_unique)) is now too short. Deleting."
 			continue
 		end
 		push!(snipped_trajectory_dfs, j)

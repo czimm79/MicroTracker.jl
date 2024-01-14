@@ -1,17 +1,21 @@
 # Quick Start
 
-This page is an abridged version of the documentation which runs through using MicroTracker with sample data. At the end of each bullet, there is a link to the full section with more detailed explanation.
+This quick start guide is an abridged version of the full documentation where you'll run through a typical workflow with sample data. At the end of each bullet, there is a link to the specific full documentation section with a detailed explanation. You can click on the full documentation sections on the left 👈, or here:
+[Setting Up](@ref)
+[Linking](@ref)
+[Collapsing](@ref)
+[Visualization](@ref)
 
 - **Install Julia** from their [website](https://julialang.org/downloads/platform/), making sure to add julia to your PATH. ([Download and install Julia](@ref))
 - **Open a terminal** in a new empty folder, and type `julia` to open a julia REPL in that directory. ([Open a Julia REPL in a directory](@ref))
-- **Create a Julia environment and install MicroTracker** into it using the following two commands. You can paste these into the Julia REPL.
+- **Create a Julia environment and install MicroTracker** into it using the following two commands. You can paste these into the Julia REPL. 
 ```
 ] activate .
 ```
 ```
 add MicroTracker
 ```
-- **Import MicroTracker** into your namespace using the following command. Make sure you press backspace to get out of the [Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/) before running this command.
+- **Import MicroTracker** into your namespace using the following command. Make sure you press backspace to get out of the [Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/) before running this command. Note that MicroTracker also automatically installs and imports a couple Python functions, see [Python interface](@ref) if any issues arise.
 
 ```julia
 using MicroTracker
