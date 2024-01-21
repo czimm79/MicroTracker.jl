@@ -14,9 +14,9 @@ authors:
     - name: David W.M. Marr
       affiliation: 1
 affiliations:
-    - name: Department of Chemical and Biological Engineering, Colorado School of Mines, Golden, CO, USA
+    - name: Department of Chemical and Biological Engineering, Colorado School of Mines, Golden, CO, United States of America
       index: 1
-    - name: Departments of Bioengineering and Pediatrics, University of Colorado Denver | Anschutz Medical Campus, Aurora, CO, USA
+    - name: Departments of Bioengineering and Pediatrics, University of Colorado Denver, Anschutz Medical Campus, Aurora, CO, United States of America
       index: 2
 bibliography: paper.bib
 ---
@@ -43,3 +43,5 @@ MicroTracker.jl also couples with Pluto.jl[@plas_fonspplutojl_2022] to feature a
 
 # Acknowledgements
 The authors acknowledge support from the National Institutes of Health under grants R01NS102465 and R21AI138214.
+
+# References
