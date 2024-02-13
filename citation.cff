@@ -1,0 +1,33 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Zimmermann
+  given-names: Coy J.
+- family-names: Neeves
+  given-names: Keith B.
+- family-names: Marr
+  given-names: David W. M.
+doi: 10.5281/zenodo.10578580
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Zimmermann
+    given-names: Coy J.
+  - family-names: Neeves
+    given-names: Keith B.
+  - family-names: Marr
+    given-names: David W. M.
+  date-published: 2024-02-13
+  doi: 10.21105/joss.05804
+  issn: 2475-9066
+  issue: 94
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5804
+  title: "MicroTracker.jl: A Julia package for microbot research"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05804"
+  volume: 9
+title: "MicroTracker.jl: A Julia package for microbot research"
+
