@@ -1,4 +1,4 @@
-<h1><img alt="MicroTracker.jl" src="https://github.com/czimm79/MicroTracker.jl/assets/49537407/aa9cdee9-c827-4ef0-a964-b53c2c52b336" width=426 height=81.4 ></h1>
+<h1><img alt="MicroTracker.jl" src="https://github.com/czimm79/MicroTracker.jl/assets/49537407/e721bd0c-1df8-42be-825f-2bbc51f2cf47" width=426 height=100 ></h1>
 
 [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/)
 [![Build Status](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml?query=branch%3Amaster)
