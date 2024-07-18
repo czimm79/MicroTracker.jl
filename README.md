@@ -1,10 +1,10 @@
 <h1><img alt="MicroTracker.jl" src="https://github.com/czimm79/MicroTracker.jl/assets/49537407/e721bd0c-1df8-42be-825f-2bbc51f2cf47" width=426 height=100 ></h1>
 
 [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://czimm79.github.io/MicroTracker.jl/dev/)
-[![Build Status](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/czimm79/MicroTracker.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![Coverage](https://codecov.io/gh/czimm79/MicroTracker.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/czimm79/MicroTracker.jl)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05804/status.svg)](https://doi.org/10.21105/joss.05804)
 
-MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package that tracks and analyzes moving [microbots](https://www.nature.com/articles/s41467-020-19322-7) in microscopy video. This package tracks critical microbot metrics including size, velocity, and rotation rate. Combined with easy batch processing of videos, MicroTracker enables high-throughput analysis across multiple global experimental variables. For more information on microbots and this package, please see the short [paper](https://github.com/czimm79/MicroTracker.jl/blob/master/paper/paper.md).
+MicroTracker.jl is a feature-complete [Julia](https://julialang.org/) package that tracks and analyzes moving [microbots](https://www.nature.com/articles/s41467-020-19322-7) in microscopy video. This package tracks critical microbot metrics including size, velocity, and rotation rate. Combined with easy batch processing of videos, MicroTracker enables high-throughput analysis across multiple global experimental variables. For more information on microbots and this package, please see the short [paper](https://joss.theoj.org/papers/10.21105/joss.05804#).
 
 https://github.com/czimm79/MicroTracker.jl/assets/49537407/12c9a035-8b00-4576-a21b-ec7b8fa87629
 
